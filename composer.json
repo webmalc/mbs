@@ -1,5 +1,6 @@
 {
     "name": "symfony/framework-standard-edition",
+    "minimum-stability": "dev",
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
@@ -17,7 +18,12 @@
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "incenteev/composer-parameter-handler": "~2.0",
+        "doctrine/mongodb-odm": "~1.0@dev",
+        "doctrine/mongodb-odm-bundle": "~3.0@dev",
+        "stof/doctrine-extensions-bundle": "~1.2@dev",
+        "friendsofsymfony/jsrouting-bundle": "~2.0@dev",
+        "misd/guzzle-bundle": "~1.1@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
