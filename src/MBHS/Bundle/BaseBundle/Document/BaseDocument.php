@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ODM\MappedSuperclass
  */
-class Base 
+class BaseDocument
 {
     /**
      * @var string

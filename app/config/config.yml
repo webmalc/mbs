@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%" }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -83,6 +83,20 @@ doctrine_mongodb:
 #                    alias: GedmoTree # this one is optional and will default to the name set for the mapping
 #                    is_bundle: false
 
+# StofDoctrineExtensionsBundle Configuration
+stof_doctrine_extensions:
+    default_locale: ru_RU
+    mongodb:
+        default:
+            blameable:      true
+            timestampable:  true
+            loggable:       true
+            softdeleteable: true
+            sluggable:      false
+            translatable:   false
+            uploadable:     false
+            tree:           false
+            sortable:       false
 
 # Swiftmailer Configuration
 swiftmailer:

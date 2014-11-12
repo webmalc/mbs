@@ -1,0 +1,3 @@
+services:
+    mbhs.helper:
+            class: MBHS\Bundle\BaseBundle\Service\Helper
