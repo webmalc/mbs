@@ -6,6 +6,7 @@ use MBHS\Bundle\BaseBundle\Controller\BaseController as Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,15 +15,37 @@ use Symfony\Component\HttpFoundation\Request;
 class SmsController extends Controller
 {
     /**
+     * Send client sms
      * @Route("/send")
-     * @Template()
+     * @Method("GET")
      */
-    public function sendAction()
+    public function sendAction(Request $request)
     {
-        $client = $this->get('guzzle.client');
-        $request = $client->get('http://www.google.com/');
-        echo $request->send()->getBody(); exit();
+        $mbhsRequest = $this->container->get('mbhs.request');
+        $client = $mbhsRequest->getClient($request);
 
-        return [];
+        if (empty($client)) {
+            return new JsonResponse([
+                    'error' => true,
+                    'message' => 'Client not found',
+                    'code' => 101
+                ]);
+        }
+
+        $result = $mbhsRequest->sendSms($request, $client);
+
+        if ($result->error) {
+            return new JsonResponse([
+                    'error' => true,
+                    'message' => $result->message,
+                    'code' => $result->code
+                ]);
+        }
+
+        return new JsonResponse([
+                'error' => false,
+                'message' => 'Sms sent',
+                'smsCount' => $client->getSmsCount()
+            ]);
     }
 }

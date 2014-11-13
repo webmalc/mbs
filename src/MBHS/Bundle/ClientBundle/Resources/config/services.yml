@@ -1,0 +1,4 @@
+services:
+  mbhs.request:
+          class: MBHS\Bundle\ClientBundle\Service\Request
+          arguments: [@service_container]

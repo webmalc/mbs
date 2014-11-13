@@ -123,8 +123,8 @@ class Client extends Base
      * @ODM\Int()
      * @Assert\Type(type="numeric")
      * @Assert\Range(
-     *      min=0,
-     *      minMessage="Количество смс не может быть меньше нуля"
+     *      min=-10,
+     *      minMessage="Количество смс не может быть меньше -10"
      * )
      */
     protected $smsCount;
@@ -291,7 +291,12 @@ class Client extends Base
      */
     public function setSmsCount($smsCount)
     {
-        $this->smsCount = $smsCount;
+        $this->smsCount = (int) $smsCount;
+
+        if ($this->smsCount < - 10) {
+            $this->smsCount = -10;
+        }
+
         return $this;
     }
 

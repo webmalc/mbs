@@ -1,3 +1,7 @@
 services:
     mbhs.helper:
-            class: MBHS\Bundle\BaseBundle\Service\Helper
+      class: MBHS\Bundle\BaseBundle\Service\Helper
+
+    mbhs.epochta:
+      class: MBHS\Bundle\BaseBundle\Service\Epochta
+      arguments: [@kernel]
