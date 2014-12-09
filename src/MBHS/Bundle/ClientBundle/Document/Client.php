@@ -12,7 +12,7 @@ use Gedmo\Blameable\Traits\BlameableDocument;
 use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 
 /**
- * @ODM\Document(collection="ClientConfig")
+ * @ODM\Document(collection="Client")
  * @Gedmo\Loggable
  * @MongoDBUnique(fields="title", message="Клиент с таким названием уже существует")
  * @MongoDBUnique(fields="email", message="Клиент с таким e-mail уже существует")
@@ -128,6 +128,14 @@ class Client extends Base
      * )
      */
     protected $smsCount;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Versioned
+     * @ODM\Date()
+     * @Assert\Date()
+     */
+    protected $lastLogin;
 
     /**
      * Set title
@@ -308,5 +316,27 @@ class Client extends Base
     public function getSmsCount()
     {
         return $this->smsCount;
+    }
+
+    /**
+     * Set lastLogin
+     *
+     * @param /DateTime $end
+     * @return self
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+        return $this;
+    }
+
+    /**
+     * Get lastLogin
+     *
+     * @return /DateTime $lastLogin
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
     }
 }

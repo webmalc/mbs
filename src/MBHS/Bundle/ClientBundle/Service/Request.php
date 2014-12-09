@@ -60,17 +60,29 @@ class Request
 
             return $result;
         }
-        if(!$request->get('phone')) {
+
+        $phone = $request->get('phone');
+        if(!$phone) {
             $result->error = true;
             $result->message = 'phone parameter not found';
             $result->code = 103;
 
             return $result;
         }
+        $phone = $this->container->get('mbhs.helper')->cleanPhone($phone);
+
+        if (mb_strlen($phone) !== 11) {
+            $result->error = true;
+            $result->message = 'invalid phone number: ' . $request->get('phone');
+            $result->code = 104;
+
+            return $result;
+        }
+
         if($client->getSmsCount() <= -10) {
             $result->error = true;
             $result->message = 'sms count less then -10';
-            $result->code = 104;
+            $result->code = 105;
 
             return $result;
         }
@@ -79,11 +91,11 @@ class Request
             $text = $request->get('sms');
             (preg_match('/[а-яёА-ЯЁ]+/', $text)) ? $max = 70: $max = 140;
             $minus = ceil(mb_strlen($text)/$max);
-            $this->container->get('mbhs.epochta')->send($request->get('sms'), $request->get('phone'));
+            $this->container->get('mbhs.epochta')->send($request->get('sms'), $phone);
         } catch (\Exception $e) {
             $result->error = true;
             $result->message = $e->getMessage();
-            $result->code = 105;
+            $result->code = 106;
 
             return $result;
         }
