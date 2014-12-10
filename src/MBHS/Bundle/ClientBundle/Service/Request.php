@@ -6,6 +6,7 @@ use MBHS\Bundle\BaseBundle\Document\Log;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use MBHS\Bundle\ClientBundle\Document\Client;
+use MBHS\Bundle\ClientBundle\Document\PirateClient;
 
 /**
  *  Calculation service
@@ -46,6 +47,23 @@ class Request
             ]);
 
         return $client;
+    }
+
+    /**
+     * @param SymfonyRequest $request
+     * @return PirateClient
+     */
+    public function addPirateClient(SymfonyRequest $request)
+    {
+        $pirate = new PirateClient();
+        $pirate->setServerIp($request->getClientIp())
+            ->setUserIp($request->get('ip'))
+            ->setUrl($request->get('url'))
+        ;
+        $this->dm->persist($pirate);
+        $this->dm->flush();
+
+        return $pirate;
     }
 
     public function sendSms(SymfonyRequest $request, Client $client)
@@ -91,7 +109,7 @@ class Request
             $text = $request->get('sms');
             (preg_match('/[а-яёА-ЯЁ]+/', $text)) ? $max = 70: $max = 140;
             $minus = ceil(mb_strlen($text)/$max);
-            $this->container->get('mbhs.epochta')->send($request->get('sms'), $phone);
+            //$this->container->get('mbhs.epochta')->send($request->get('sms'), $phone);
         } catch (\Exception $e) {
             $result->error = true;
             $result->message = $e->getMessage();
@@ -100,7 +118,7 @@ class Request
             return $result;
         }
 
-        $client->setSmsCount($client->getSmsCount() - $minus);
+        $client->setSmsCount($client->getSmsCount() + $minus);
         $this->dm->persist($client);
         $this->dm->flush();
 

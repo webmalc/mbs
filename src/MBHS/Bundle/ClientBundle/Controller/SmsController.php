@@ -25,6 +25,8 @@ class SmsController extends Controller
         $client = $mbhsRequest->getClient($request);
 
         if (empty($client)) {
+            $mbhsRequest->addPirateClient($request);
+
             return new JsonResponse([
                     'error' => true,
                     'message' => 'Client not found',

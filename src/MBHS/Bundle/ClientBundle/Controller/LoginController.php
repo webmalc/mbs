@@ -27,9 +27,7 @@ class LoginController extends Controller
         $client = $mbhsRequest->getClient($request);
 
         if (empty($client)) {
-            $pirate = new PirateClient();
-            $pirate->setServerIp($request->getClientIp())->setUserIp($request->get('ip'));
-            $dm->persist($pirate);
+            $mbhsRequest->addPirateClient($request);
         } else {
             $client->setLastLogin(new \DateTime());
             $dm->persist($client);

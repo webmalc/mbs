@@ -23,6 +23,7 @@ class ClientCreateCommand extends ContainerAwareCommand
             ->addArgument('ip', InputArgument::REQUIRED, 'Client ip')
             ->addArgument('key', InputArgument::OPTIONAL, 'Client key')
             ->addArgument('smsCount', InputArgument::OPTIONAL, 'Client sms count')
+            ->addArgument('channelManagerCount', InputArgument::OPTIONAL, 'Client channel manager count')
         ;
     }
 
@@ -35,6 +36,7 @@ class ClientCreateCommand extends ContainerAwareCommand
             ->setUrl($input->getArgument('url'))
             ->setIp($input->getArgument('ip'))
             ->setSmsCount($input->getArgument('smsCount'))
+            ->setChannelManagerCount($input->getArgument('channelManagerCount'))
         ;
         $key = $input->getArgument('key');
         if(empty($key)) {
@@ -156,6 +158,17 @@ class ClientCreateCommand extends ContainerAwareCommand
                 }
             );
             $input->setArgument('smsCount', (int) $arg);
+            unset($arg);
+        }
+        if (!$input->getArgument('channelManagerCount')) {
+            $arg = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                '<question>Please enter a channel manager count:</question>',
+                function($arg) {
+                    return $arg;
+                }
+            );
+            $input->setArgument('channelManagerCount', (int) $arg);
             unset($arg);
         }
     }

@@ -8,16 +8,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ClientAddSmsCommand extends ContainerAwareCommand
+class ClientChannelManagerCommand extends ContainerAwareCommand
 {
 
     protected function configure()
     {
         $this
-            ->setName('mbhs:client:sms')
-            ->setDescription('Add sms to a client')
+            ->setName('mbhs:client:channelmanager')
+            ->setDescription('Set channel manager count to a client')
             ->addArgument('query', InputArgument::REQUIRED, 'Search query (title, url, email or Id)')
-            ->addArgument('sms', InputArgument::REQUIRED, 'Sms count')
+            ->addArgument('channelManagerCount', InputArgument::REQUIRED, 'Channel manager count')
         ;
     }
 
@@ -43,11 +43,11 @@ class ClientAddSmsCommand extends ContainerAwareCommand
             return false;
         }
 
-        $client->setSmsCount($input->getArgument('sms'));
+        $client->setChannelManagerCount($input->getArgument('channelManagerCount'));
         $dm->persist($client);
         $dm->flush();
 
-        $output->writeln('<info>Sms added. Client: ' . $client->getTitle() . ' (#' . $client->getId() . '). Sms count: ' . $client->getSmsCount() . '</info>');
+        $output->writeln('<info>Channel manager count saved. Client: ' . $client->getTitle() . ' (#' . $client->getId() . '). Channel manager count: ' . $client->getChannelManagerCount() . '</info>');
     }
     /**
      * @see Command
@@ -68,19 +68,19 @@ class ClientAddSmsCommand extends ContainerAwareCommand
             $input->setArgument('query', $arg);
             unset($arg);
         }
-        if (!$input->getArgument('sms')) {
+        if (!$input->getArgument('channelManagerCount')) {
             $arg = $this->getHelper('dialog')->askAndValidate(
                 $output,
-                '<question>Please enter a sms count:</question>',
+                '<question>Please enter a channel manager count:</question>',
                 function($arg) {
                     if ($arg == null) {
-                        throw new \Exception('Sms count can not be empty');
+                        throw new \Exception('Channel manager count can not be empty');
                     }
 
                     return $arg;
                 }
             );
-            $input->setArgument('sms', (int) $arg);
+            $input->setArgument('channelManagerCount', (int) $arg);
             unset($arg);
         }
     }

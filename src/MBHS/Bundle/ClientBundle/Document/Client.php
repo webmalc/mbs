@@ -130,6 +130,18 @@ class Client extends Base
     protected $smsCount;
 
     /**
+     * @var int
+     * @Gedmo\Versioned
+     * @ODM\Int()
+     * @Assert\Type(type="numeric")
+     * @Assert\Range(
+     *      min=0,
+     *      minMessage="Количество путевок из channel manager`а не может быть меньше 0"
+     * )
+     */
+    protected $channelManagerCount;
+
+    /**
      * @var \DateTime
      * @Gedmo\Versioned
      * @ODM\Date()
@@ -321,10 +333,10 @@ class Client extends Base
     /**
      * Set lastLogin
      *
-     * @param /DateTime $end
+     * @param \DateTime $lastLogin
      * @return self
      */
-    public function setLastLogin($lastLogin)
+    public function setLastLogin(\DateTime $lastLogin)
     {
         $this->lastLogin = $lastLogin;
         return $this;
@@ -333,10 +345,37 @@ class Client extends Base
     /**
      * Get lastLogin
      *
-     * @return /DateTime $lastLogin
+     * @return \DateTime $lastLogin
      */
     public function getLastLogin()
     {
         return $this->lastLogin;
+    }
+
+    /**
+     * Set channelManagerCount
+     *
+     * @param int $channelManagerCount
+     * @return self
+     */
+    public function setChannelManagerCount($channelManagerCount)
+    {
+        $this->channelManagerCount = (int) $channelManagerCount;
+
+        if ($this->channelManagerCount < 0) {
+            $this->channelManagerCount = 0;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get channelManagerCount
+     *
+     * @return int $channelManagerCount
+     */
+    public function getChannelManagerCount()
+    {
+        return (int) $this->channelManagerCount;
     }
 }

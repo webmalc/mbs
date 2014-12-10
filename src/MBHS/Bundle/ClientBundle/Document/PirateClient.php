@@ -55,6 +55,14 @@ class PirateClient extends Base
     protected $userIp;
 
     /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ODM\String()
+     * @Assert\Url()
+     */
+    protected $url;
+
+    /**
      * Set serverIp
      *
      * @param string $serverIp
@@ -96,5 +104,27 @@ class PirateClient extends Base
     public function getUserIp()
     {
         return $this->userIp;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return self
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string $url
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }
