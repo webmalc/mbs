@@ -65,24 +65,6 @@ doctrine_mongodb:
                     dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Document"
                     alias: GedmoLoggable # this one is optional and will default to the name set for the mapping
                     is_bundle: false
-#                gedmo_translatable:
-#                    type: annotation
-#                    prefix: Gedmo\Translatable\Document
-#                    dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Document"
-#                    alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
-#                    is_bundle: false
-#                gedmo_translator:
-#                    type: annotation
-#                    prefix: Gedmo\Translator\Document
-#                    dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Document"
-#                    alias: GedmoTranslator # this one is optional and will default to the name set for the mapping
-#                    is_bundle: false
-#                gedmo_tree:
-#                    type: annotation
-#                    prefix: Gedmo\Tree\Document
-#                    dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document"
-#                    alias: GedmoTree # this one is optional and will default to the name set for the mapping
-#                    is_bundle: false
 
 # StofDoctrineExtensionsBundle Configuration
 stof_doctrine_extensions:

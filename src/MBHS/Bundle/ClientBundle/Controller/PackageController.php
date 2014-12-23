@@ -36,8 +36,10 @@ class PackageController extends Controller
             $log = new Log();
 
             $text = 'Add channel manager package. Channel manager count: ' . $client->getChannelManagerCount() .
-                '. Info: ' . $request->get('number') . ' ' . $request->get('roomType') . ' ' .
-                $request->get('begin') . '-' . $request->get('end') . ' ' . $request->get('tourist')
+                '. Info: ' . $request->get('number') . ';' . $request->get('roomType') . ';' .
+                $request->get('begin') . '-' . $request->get('end') . ';' .
+                $request->get('tourist') . ';' . $request->get('tourist_phone') . ';' . $request->get('tourist_email') .
+                ';' . $request->get('service')
             ;
 
             $log->setType('channelmanager')
