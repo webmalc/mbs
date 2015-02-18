@@ -51,10 +51,14 @@ class Request
 
     /**
      * @param SymfonyRequest $request
-     * @return PirateClient
+     * @return PirateClient|boolean
      */
     public function addPirateClient(SymfonyRequest $request)
     {
+        if (in_array($request->getClientIp(), ['176.192.20.30', '95.85.3.188'])) {
+            return false;
+        }
+
         $pirate = new PirateClient();
         $pirate->setServerIp($request->getClientIp())
             ->setUserIp($request->get('ip'))
