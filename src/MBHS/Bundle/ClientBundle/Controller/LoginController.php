@@ -3,12 +3,11 @@
 namespace MBHS\Bundle\ClientBundle\Controller;
 
 use MBHS\Bundle\BaseBundle\Controller\BaseController as Controller;
-use MBHS\Bundle\ClientBundle\Document\PirateClient;
+use MBHS\Bundle\BaseBundle\Document\Log;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/login")
@@ -16,13 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
 class LoginController extends Controller
 {
     /**
+     * /**
      * Set client last login
      * @Route("/")
      * @Method("GET")
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loginAction(Request $request)
     {
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
         $mbhsRequest = $this->container->get('mbhs.request');
         $client = $mbhsRequest->getClient($request);
 
@@ -30,10 +31,10 @@ class LoginController extends Controller
             $mbhsRequest->addPirateClient($request);
         } else {
             $client->setLastLogin(new \DateTime());
-            $dm->persist($client);
+            $this->dm->persist($client);
         }
-        $dm->flush();
+        $this->dm->flush();
 
-        return new Response();
+        return new JsonResponse(['status' => true]);
     }
 }

@@ -5,3 +5,15 @@ services:
     mbhs.epochta:
       class: MBHS\Bundle\BaseBundle\Service\Epochta
       arguments: [@kernel]
+
+    #Admin
+    sonata.admin.log:
+      class: MBHS\Bundle\BaseBundle\Admin\Log
+      tags:
+          - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Logs"}
+      arguments:
+          - ~
+          - MBHS\Bundle\BaseBundle\Document\Log
+          - ~
+      calls:
+          - [ setTranslationDomain, [MBHSClientBundle]]

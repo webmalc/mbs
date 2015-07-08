@@ -4,7 +4,7 @@ parameters:
     mailer_host: smtp.yandex.ru
     mailer_user: robot@maxi-booking.ru
     mailer_password: ghjlflbv10rjgbq
-    locale: ru
+    locale: en
     secret: I5Uv5dLKYqA8qe4XyX6XLxrT3
     debug_toolbar: true
     debug_redirects: false

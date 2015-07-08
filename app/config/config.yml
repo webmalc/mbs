@@ -68,7 +68,7 @@ doctrine_mongodb:
 
 # StofDoctrineExtensionsBundle Configuration
 stof_doctrine_extensions:
-    default_locale: ru_RU
+    default_locale: en_US
     mongodb:
         default:
             blameable:      true
@@ -88,3 +88,27 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+# SonataBlockBundle Configuration
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        sonata.admin.block.search_result:
+                contexts: [admin]
+
+# SonataAdminBundle Configuration
+sonata_admin:
+    title:      MBHS Admin
+    templates:
+            layout: MBHSBaseBundle:SonataAdmin:standard_layout.html.twig
+    dashboard:
+            groups:
+                Clients:
+                  icon: <i class='fa fa-users'></i>
+                Logs:
+                  icon: <i class='fa fa-clock-o'></i>
+
+

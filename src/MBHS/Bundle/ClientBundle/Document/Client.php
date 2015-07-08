@@ -14,9 +14,9 @@ use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 /**
  * @ODM\Document(collection="Client")
  * @Gedmo\Loggable
- * @MongoDBUnique(fields="title", message="Клиент с таким названием уже существует")
- * @MongoDBUnique(fields="email", message="Клиент с таким e-mail уже существует")
- * @MongoDBUnique(fields="url", message="Клиент с таким url уже существует")
+ * @MongoDBUnique(fields="title", message="The client with the same title already exists")
+ * @MongoDBUnique(fields="email", message="The client with the same e-mail already exists")
+ * @MongoDBUnique(fields="url", message="The client with the same url already exists")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Client extends Base
@@ -46,9 +46,9 @@ class Client extends Base
      * @Assert\NotNull()
      * @Assert\Length(
      *      min=2,
-     *      minMessage="Слишком короткое имя",
+     *      minMessage="Too short title",
      *      max=100,
-     *      maxMessage="Слишком длинное имя"
+     *      maxMessage="Too long title"
      * )
      */
     protected $title;
@@ -69,9 +69,9 @@ class Client extends Base
      * @Assert\NotNull()
      * @Assert\Length(
      *      min=2,
-     *      minMessage="Слишком короткий телефон",
+     *      minMessage="Too short phone",
      *      max=100,
-     *      maxMessage="Слишком длинный телефон"
+     *      maxMessage="Too long phone"
      * )
      */
     protected $phone;
@@ -101,9 +101,9 @@ class Client extends Base
      * @Assert\NotNull()
      * @Assert\Length(
      *      min=40,
-     *      minMessage="Слишком короткий ключ",
+     *      minMessage="The key must be 40 characters long",
      *      max=40,
-     *      maxMessage="Слишком длинный ключ"
+     *      maxMessage="The key must be 40 characters long"
      * )
      */
     protected $key;
@@ -289,7 +289,7 @@ class Client extends Base
      */
     public function setIsEnabled($isEnabled)
     {
-        $this->isEnabled = $isEnabled;
+        $this->isEnabled = (boolean) $isEnabled;
         return $this;
     }
 
@@ -300,7 +300,7 @@ class Client extends Base
      */
     public function getIsEnabled()
     {
-        return $this->isEnabled;
+        return (boolean)$this->isEnabled;
     }
 
     /**
@@ -377,5 +377,10 @@ class Client extends Base
     public function getChannelManagerCount()
     {
         return (int) $this->channelManagerCount;
+    }
+
+    public function __toString()
+    {
+        return empty($this->getTitle()) ? 'New client' : $this->getTitle();
     }
 }
