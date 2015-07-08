@@ -16,4 +16,15 @@ services:
           - MBHS\Bundle\BaseBundle\Document\Log
           - ~
       calls:
-          - [ setTranslationDomain, [MBHSClientBundle]]
+          - [ setTranslationDomain, [MBHSBaseBundle]]
+
+    sonata.admin.user:
+          class: MBHS\Bundle\BaseBundle\Admin\User
+          tags:
+              - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Auth", label: "Users"}
+          arguments:
+              - ~
+              - MBHS\Bundle\BaseBundle\Document\User
+              - ~
+          calls:
+              - [ setTranslationDomain, [MBHSBaseBundle]]

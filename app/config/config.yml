@@ -89,26 +89,106 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-# SonataBlockBundle Configuration
+fos_user:
+    db_driver: mongodb # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: MBHS\Bundle\BaseBundle\Document\User
+
+    group:
+        group_class: MBHS\Bundle\BaseBundle\Document\Group
+
+    profile: # Authentication Form
+        form:
+            type:               fos_user_profile
+            handler:            fos_user.profile.form.handler.default
+            name:               fos_user_profile_form
+            validation_groups:  [Authentication] # Please note : this is not the default value
+
+sonata_user:
+    manager_type: mongodb
+    class:
+        user:   MBHS\Bundle\BaseBundle\Document\User
+        group:  MBHS\Bundle\BaseBundle\Document\Group
+    profile:  # Profile Form (firstname, lastname, etc ...)
+        form:
+            type:               sonata_user_profile
+            handler:            sonata.user.profile.form.handler.default
+            name:               sonata_user_profile_form
+            validation_groups:  [Profile]
+
 sonata_block:
-    default_contexts: [cms]
+    default_contexts: [admin]
     blocks:
-        # Enable the SonataAdminBundle block
         sonata.admin.block.admin_list:
             contexts:   [admin]
         sonata.admin.block.search_result:
-                contexts: [admin]
+            contexts:   [admin]
+        sonata.block.service.text:
+            contexts:   [admin]
+        sonata.user.block.menu:
+            contexts:   [admin]
+        sonata.user.block.account:
+            contexts:   [admin]
 
-# SonataAdminBundle Configuration
+services:
+    sonata.user.serializer.handler.user:
+        class: Sonata\UserBundle\Serializer\UserSerializerHandler
+        tags:
+            - { name: jms_serializer.subscribing_handler }
+        arguments:
+            - [ sonata.user.mongodb.user_manager ]
+
 sonata_admin:
-    title:      MBHS Admin
+    security:
+        handler: sonata.admin.security.handler.role
+
+    title:  MBHS Admin
     templates:
-            layout: MBHSBaseBundle:SonataAdmin:standard_layout.html.twig
+      layout: MBHSBaseBundle:SonataAdmin:standard_layout.html.twig
     dashboard:
-            groups:
-                Clients:
-                  icon: <i class='fa fa-users'></i>
-                Logs:
-                  icon: <i class='fa fa-clock-o'></i>
+      groups:
+          Clients:
+            icon: <i class='fa fa-users'></i>
+          Logs:
+            icon: <i class='fa fa-clock-o'></i>
+          Auth:
+            icon: <i class='fa fa-lock'></i>
+
+sonata_doctrine_mongo_db_admin:
+    templates:
+        form:
+            - SonataDoctrineMongoDBAdminBundle:Form:form_admin_fields.html.twig
+        filter:
+            - SonataDoctrineMongoDBAdminBundle:Form:filter_admin_fields.html.twig
+        types:
+            list:
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                time:       SonataAdminBundle:CRUD:list_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+
+            show:
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                time:       SonataAdminBundle:CRUD:show_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+
 
 

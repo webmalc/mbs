@@ -1,7 +1,7 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
 {% block sonata_sidebar_search %}
-    {% if true or app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+    {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
         <form action="{{ url('sonata_admin_search') }}" method="GET"
               class="sidebar-form" role="search">
             <div class="input-group custom-search-form">
@@ -19,7 +19,7 @@
 {% endblock sonata_sidebar_search %}
 
 {% block side_bar_nav %}
-    {% if true or app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+    {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
         <ul class="sidebar-menu">
             {% for group in admin_pool.dashboardgroups %}
                 {% set display = (group.roles is empty or is_granted('ROLE_SUPER_ADMIN') ) %}
@@ -66,3 +66,26 @@
         </ul>
     {% endif %}
 {% endblock side_bar_nav %}
+
+{% block sonata_top_nav_menu %}
+    {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+    <div class="navbar-right">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-plus-square fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                {% include admin_pool.getTemplate('add_block') %}
+            </li>
+            <li class="dropdown user-menu">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    {% include admin_pool.getTemplate('user_block') %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+{% endblock %}

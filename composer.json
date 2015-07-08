@@ -23,7 +23,9 @@
         "friendsofsymfony/jsrouting-bundle": "*@stable",
         "misd/guzzle-bundle": "*@stable",
         "sonata-project/admin-bundle": "*@stable",
-        "sonata-project/doctrine-mongodb-admin-bundle": "*@stable"
+        "sonata-project/doctrine-mongodb-admin-bundle": "*@stable",
+        "sonata-project/easy-extends-bundle": "*@stable",
+        "sonata-project/user-bundle": "*@stable"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
