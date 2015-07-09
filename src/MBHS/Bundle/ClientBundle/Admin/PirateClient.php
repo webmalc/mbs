@@ -29,7 +29,7 @@ class PirateClient extends Admin
             ->addIdentifier('serverIp')
             ->add('userIp')
             ->add('url', 'url')
-            ->add('createdAt')
+            ->add('createdAt', 'datetime')
             ->add('_action', 'actions', ['actions' => ['delete' => []]])
         ;
     }

@@ -1,12 +1,12 @@
 <?php
-namespace MBHS\Bundle\BaseBundle\Admin;
+namespace MBHS\Bundle\ClientBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
-class Log extends Admin
+class ChannelManager extends Admin
 {
     protected $datagridValues = array(
         '_page' => 1,
@@ -18,9 +18,9 @@ class Log extends Admin
     {
         $dm  = $this->getConfigurationPool()->getContainer()->get('doctrine_mongodb')->getManager();
         $types = $dm
-            ->getRepository('MBHSBaseBundle:Log')
+            ->getRepository('MBHSClientBundle:Channelmanager')
             ->createQueryBuilder('q')
-            ->distinct('type')
+            ->distinct('title')
             ->getQuery()
             ->execute()
             ->toArray()
@@ -29,10 +29,19 @@ class Log extends Admin
         return array_combine($types, $types);
     }
 
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+            ->add('title', 'text', ['label' => 'Title'])
+            ->add('client', 'sonata_type_model_list', ['btn_delete' => false])
+            ->add('key', 'number', ['label' => 'Key', 'help' => 'Hotel ID from channelmanager configuration'])
+        ;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('type', 'doctrine_mongo_string', ['field_type' => 'choice'], null, [
+            ->add('title', 'doctrine_mongo_string', ['field_type' => 'choice'], null, [
                 'choices' => $this->getTypesForFilter(),
             ])
             ->add('client')
@@ -42,16 +51,12 @@ class Log extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('type')
-            ->add('text')
+            ->addIdentifier('title')
+            ->add('key')
             ->add('client')
-            ->add('createdAt', 'datetime')
-            ->add('_action', 'actions', ['actions' => ['delete' => []]])
+            ->add('createdAt')
+            ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])
         ;
     }
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->clearExcept(['list', 'show', 'batch', 'delete', 'export']);
-    }
 }

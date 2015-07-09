@@ -6,6 +6,13 @@ services:
       class: MBHS\Bundle\BaseBundle\Service\Epochta
       arguments: [@kernel]
 
+    doctrine_odm.mongodb.validator.unique:
+          class: MBHS\Bundle\BaseBundle\Validator\Constraints\UniqueEntityValidator
+          arguments:
+            - @doctrine_mongodb
+          tags:
+            - { name: validator.constraint_validator, alias: doctrine_odm.mongodb.unique }
+
     #Admin
     sonata.admin.log:
       class: MBHS\Bundle\BaseBundle\Admin\Log

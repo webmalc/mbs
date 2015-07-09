@@ -150,6 +150,12 @@ class Client extends Base
     protected $lastLogin;
 
     /**
+     * @var array
+     * @ODM\ReferenceMany(targetDocument="MBHS\Bundle\ClientBundle\Document\ChannelManager", mappedBy="client")
+     */
+    protected $channelManagers;
+
+    /**
      * Set title
      *
      * @param string $title
@@ -379,8 +385,43 @@ class Client extends Base
         return (int) $this->channelManagerCount;
     }
 
-    public function __toString()
+    public function getName()
     {
         return empty($this->getTitle()) ? 'New client' : $this->getTitle();
+    }
+
+    public function __construct()
+    {
+        $this->channelManagers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add channelManager
+     *
+     * @param \MBHS\Bundle\ClientBundle\Document\ChannelManager $channelManager
+     */
+    public function addChannelManager(\MBHS\Bundle\ClientBundle\Document\ChannelManager $channelManager)
+    {
+        $this->channelManagers[] = $channelManager;
+    }
+
+    /**
+     * Remove channelManager
+     *
+     * @param \MBHS\Bundle\ClientBundle\Document\ChannelManager $channelManager
+     */
+    public function removeChannelManager(\MBHS\Bundle\ClientBundle\Document\ChannelManager $channelManager)
+    {
+        $this->channelManagers->removeElement($channelManager);
+    }
+
+    /**
+     * Get channelManagers
+     *
+     * @return \Doctrine\Common\Collections\Collection $channelManagers
+     */
+    public function getChannelManagers()
+    {
+        return $this->channelManagers;
     }
 }

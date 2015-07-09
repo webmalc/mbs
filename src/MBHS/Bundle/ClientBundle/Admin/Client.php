@@ -61,8 +61,9 @@ class Client extends Admin
             ->add('key')
             ->add('isEnabled', 'boolean')
             ->add('lastLogin', 'datetime')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('createdAt', 'datetime')
+            ->add('updatedAt', 'datetime')
+            ->add('channelManagers')
         ;
 
     }
@@ -75,7 +76,7 @@ class Client extends Admin
             ->add('phone')
             ->add('url', 'url')
             ->add('isEnabled', 'boolean', ['editable' => true])
-            ->add('createdAt')
+            ->add('createdAt', 'datetime')
             ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])
         ;
     }
