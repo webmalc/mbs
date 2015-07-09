@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Sonata\DoctrineMongoDBAdminBundle\SonataDoctrineMongoDBAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
 
             new MBHS\Bundle\ClientBundle\MBHSClientBundle(),
             new MBHS\Bundle\BaseBundle\MBHSBaseBundle(),

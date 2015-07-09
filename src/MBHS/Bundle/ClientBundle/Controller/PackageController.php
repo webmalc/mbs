@@ -5,10 +5,9 @@ namespace MBHS\Bundle\ClientBundle\Controller;
 use MBHS\Bundle\BaseBundle\Controller\BaseController as Controller;
 use MBHS\Bundle\BaseBundle\Document\Log;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/package")
@@ -50,6 +49,6 @@ class PackageController extends Controller
             $dm->flush();
         }
 
-        return new Response();
+        return new JsonResponse(['status' => true]);
     }
 }

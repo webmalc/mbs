@@ -3,7 +3,6 @@
 namespace MBHS\Bundle\ClientBundle\Controller;
 
 use MBHS\Bundle\BaseBundle\Controller\BaseController as Controller;
-use MBHS\Bundle\BaseBundle\Document\Log;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;

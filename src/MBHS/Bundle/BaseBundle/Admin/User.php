@@ -204,6 +204,7 @@ class User extends Admin
      */
     public function preUpdate($user)
     {
+
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
     }

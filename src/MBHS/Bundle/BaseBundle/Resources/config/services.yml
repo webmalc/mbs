@@ -28,3 +28,4 @@ services:
               - ~
           calls:
               - [ setTranslationDomain, [MBHSBaseBundle]]
+              - [ setUserManager, ["@fos_user.user_manager"]]
