@@ -118,30 +118,6 @@ class Client extends Base
     protected $isEnabled = true;
 
     /**
-     * @var int
-     * @Gedmo\Versioned
-     * @ODM\Int()
-     * @Assert\Type(type="numeric")
-     * @Assert\Range(
-     *      min=-10,
-     *      minMessage="Количество смс не может быть меньше -10"
-     * )
-     */
-    protected $smsCount;
-
-    /**
-     * @var int
-     * @Gedmo\Versioned
-     * @ODM\Int()
-     * @Assert\Type(type="numeric")
-     * @Assert\Range(
-     *      min=0,
-     *      minMessage="Количество путевок из channel manager`а не может быть меньше 0"
-     * )
-     */
-    protected $channelManagerCount;
-
-    /**
      * @var \DateTime
      * @Gedmo\Versioned
      * @ODM\Date()
@@ -154,6 +130,12 @@ class Client extends Base
      * @ODM\ReferenceMany(targetDocument="MBHS\Bundle\ClientBundle\Document\ChannelManager", mappedBy="client")
      */
     protected $channelManagers;
+
+    /**
+     * @var array
+     * @ODM\ReferenceMany(targetDocument="MBHS\Bundle\ClientBundle\Document\Package", mappedBy="client")
+     */
+    protected $packages;
 
     /**
      * Set title
@@ -310,33 +292,6 @@ class Client extends Base
     }
 
     /**
-     * Set smsCount
-     *
-     * @param int $smsCount
-     * @return self
-     */
-    public function setSmsCount($smsCount)
-    {
-        $this->smsCount = (int) $smsCount;
-
-        if ($this->smsCount < - 10) {
-            $this->smsCount = -10;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get smsCount
-     *
-     * @return int $smsCount
-     */
-    public function getSmsCount()
-    {
-        return $this->smsCount;
-    }
-
-    /**
      * Set lastLogin
      *
      * @param \DateTime $lastLogin
@@ -356,33 +311,6 @@ class Client extends Base
     public function getLastLogin()
     {
         return $this->lastLogin;
-    }
-
-    /**
-     * Set channelManagerCount
-     *
-     * @param int $channelManagerCount
-     * @return self
-     */
-    public function setChannelManagerCount($channelManagerCount)
-    {
-        $this->channelManagerCount = (int) $channelManagerCount;
-
-        if ($this->channelManagerCount < 0) {
-            $this->channelManagerCount = 0;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get channelManagerCount
-     *
-     * @return int $channelManagerCount
-     */
-    public function getChannelManagerCount()
-    {
-        return (int) $this->channelManagerCount;
     }
 
     public function getName()
@@ -423,5 +351,36 @@ class Client extends Base
     public function getChannelManagers()
     {
         return $this->channelManagers;
+    }
+
+
+    /**
+     * Add package
+     *
+     * @param \MBHS\Bundle\ClientBundle\Document\Package $package
+     */
+    public function addPackage(\MBHS\Bundle\ClientBundle\Document\Package $package)
+    {
+        $this->packages[] = $package;
+    }
+
+    /**
+     * Remove package
+     *
+     * @param \MBHS\Bundle\ClientBundle\Document\Package $package
+     */
+    public function removePackage(\MBHS\Bundle\ClientBundle\Document\Package $package)
+    {
+        $this->packages->removeElement($package);
+    }
+
+    /**
+     * Get packages
+     *
+     * @return \Doctrine\Common\Collections\Collection $packages
+     */
+    public function getPackages()
+    {
+        return $this->packages;
     }
 }

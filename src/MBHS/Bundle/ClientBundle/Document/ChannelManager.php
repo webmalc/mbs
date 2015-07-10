@@ -56,12 +56,14 @@ class ChannelManager extends Base
      * @Gedmo\Versioned
      * @ODM\Int()
      * @Assert\Type(type="numeric")
+     * @Assert\NotNull()
      */
     protected $key;
 
     /**
      * @Gedmo\Versioned
      * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Client", inversedBy="channelManagers")
+     * @Assert\NotNull()
      */
     protected $client;
 

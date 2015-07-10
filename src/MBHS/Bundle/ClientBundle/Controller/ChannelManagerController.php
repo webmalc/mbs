@@ -32,7 +32,7 @@ class ChannelManagerController extends Controller
         try {
             $client = $ch->getClient($service, $request);
             $response = $ch->sendPush($service, $request, $client);
-            $log->setText('Push. Complete for client <' . $client . '>');
+            $log->setText('Push. Complete for client <' . $client . '>')->setClient($client);
 
         } catch (Exception $e) {
             $log->setText('Push. ' . $e->getMessage());

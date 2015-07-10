@@ -19,6 +19,17 @@ services:
           calls:
               - [ setTranslationDomain, [MBHSClientBundle]]
 
+  sonata.admin.package:
+            class: MBHS\Bundle\ClientBundle\Admin\Package
+            tags:
+                - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Packages"}
+            arguments:
+                - ~
+                - MBHS\Bundle\ClientBundle\Document\Package
+                - ~
+            calls:
+                - [ setTranslationDomain, [MBHSClientBundle]]
+
   sonata.admin.client:
             class: MBHS\Bundle\ClientBundle\Admin\Client
             tags:

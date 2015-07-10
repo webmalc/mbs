@@ -63,6 +63,8 @@ class Client extends Admin
             ->add('lastLogin', 'datetime')
             ->add('createdAt', 'datetime')
             ->add('updatedAt', 'datetime')
+            ->add('createdBy')
+            ->add('updatedBy')
             ->add('channelManagers')
         ;
 
