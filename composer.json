@@ -26,8 +26,7 @@
         "sonata-project/doctrine-mongodb-admin-bundle": "*@stable",
         "sonata-project/easy-extends-bundle": "*@stable",
         "sonata-project/user-bundle": "*@stable",
-        "ornicar/gravatar-bundle": "^1.1@dev",
-        "andres-montanez/magallanes": "~1.0.1"
+        "ornicar/gravatar-bundle": "^1.1@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
