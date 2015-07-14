@@ -31,9 +31,11 @@ class Client extends Admin
             ->add('title', 'text', ['label' => 'Title', 'help' => 'unique client title'])
             ->add('email', 'email', ['label' => 'E-mail', 'help' => 'unique client e-mail address'])
             ->add('phone', 'text')
+            ->add('person', 'text', ['required' => false])
             ->add('url', 'url', ['label' => 'Url', 'help' => 'unique client url address'])
             ->add('ip', 'text')
             ->add('key', 'text', ['label' => 'Key', 'help' => 'client 40-character secret key'])
+            ->add('note', 'textarea', ['required' => false])
             ->add('isEnabled', 'checkbox', ['label' => 'Enabled?', 'required' => false])
         ;
     }
@@ -56,9 +58,11 @@ class Client extends Admin
             ->add('title')
             ->add('email')
             ->add('phone')
+            ->add('person')
             ->add('url', 'url')
             ->add('ip')
             ->add('key')
+            ->add('note')
             ->add('isEnabled', 'boolean')
             ->add('lastLogin', 'datetime')
             ->add('createdAt', 'datetime')

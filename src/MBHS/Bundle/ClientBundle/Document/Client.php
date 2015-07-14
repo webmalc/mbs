@@ -67,8 +67,9 @@ class Client extends Base
      * @Gedmo\Versioned
      * @ODM\String()
      * @Assert\NotNull()
+     * @Assert\Regex(pattern="/[0-9\-\(\)\+]/", message="Invalid number")
      * @Assert\Length(
-     *      min=2,
+     *      min=7,
      *      minMessage="Too short phone",
      *      max=100,
      *      maxMessage="Too long phone"
@@ -124,6 +125,21 @@ class Client extends Base
      * @Assert\Date()
      */
     protected $lastLogin;
+
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ODM\String()
+     * @Assert\Length(min=3)
+     */
+    protected $person;
+
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ODM\String()
+     */
+    protected $note;
 
     /**
      * @var array
@@ -189,18 +205,29 @@ class Client extends Base
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = preg_replace("/[^0-9]/", "", $phone);
+
         return $this;
     }
 
     /**
      * Get phone
      *
+     * @param boolean $original
      * @return string $phone
      */
-    public function getPhone()
+    public function getPhone($original = false)
     {
-        return $this->phone;
+        $phone = preg_replace("/[^0-9]/", "", $this->phone);
+
+        if ($original || strlen($phone) < 7) {
+            return $this->phone;
+        } else {
+            return empty($phone) ? null : '+ ' . substr($phone, 0, strlen($phone) - 7) . ' ' .
+            substr($phone, -7, 3) . '-' .
+            substr($phone, -4, 2) . '-' .
+            substr($phone, -2, 2);
+        }
     }
 
     /**
@@ -382,5 +409,43 @@ class Client extends Base
     public function getPackages()
     {
         return $this->packages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param string $person
+     * @return self
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param string $note
+     * @return self
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
     }
 }

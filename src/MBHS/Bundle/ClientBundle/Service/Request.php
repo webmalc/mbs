@@ -33,9 +33,10 @@ class Request
 
     /**
      * @param SymfonyRequest $request
+     * @param boolean $enabled
      * @return null|Client
      */
-    public function getClient(SymfonyRequest $request)
+    public function getClient(SymfonyRequest $request, $enabled = true)
     {
         $url = $request->get('url');
         $key = $request->get('key');
@@ -53,7 +54,8 @@ class Request
         $client = $this->dm->getRepository('MBHSClientBundle:Client')->findOneBy([
                 'url' => $url,
                 'ip'  => $request->getClientIp(),
-                'key' => $key
+                'key' => $key,
+                'isEnabled' => $enabled
             ]);
 
         return $client;
