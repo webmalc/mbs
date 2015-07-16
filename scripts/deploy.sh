@@ -11,7 +11,6 @@ HYDRATORS=$FOLDER'bin/console doctrine:mongodb:generate:hydrators'
 FOS=$FOLDER'bin/console fos:js-routing:dump'
 ASSEST=$FOLDER'bin/console assets:install '$FOLDER'web --symlink'
 ASSESTIC=$FOLDER'bin/console assetic:dump'
-DB=$FOLDER'bin/console doctrine:mongodb:schema:create'
 PHP_FPM='service php5-fpm restart'
 
 echo -e "${GREEN}Start rsync${NC}"
@@ -35,9 +34,6 @@ ssh $SERVER $ASSEST
 
 echo -e "${GREEN}Start assetic:dump${NC}"
 ssh $SERVER $ASSESTIC
-
-echo -e "${GREEN}Start doctrine:mongodb:schema:create${NC}"
-ssh $SERVER $DB
 
 ssh $SERVER $PHP_FPM
 
