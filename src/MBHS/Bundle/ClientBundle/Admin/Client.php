@@ -36,6 +36,7 @@ class Client extends Admin
             ->add('ip', 'text')
             ->add('key', 'text', ['label' => 'Key', 'help' => 'client 40-character secret key'])
             ->add('note', 'textarea', ['required' => false])
+            ->add('version', 'sonata_type_model_list', ['btn_delete' => false, 'btn_add' => false])
             ->add('isEnabled', 'checkbox', ['label' => 'Enabled?', 'required' => false])
         ;
     }
@@ -48,6 +49,7 @@ class Client extends Admin
             ->add('phone')
             ->add('url')
             ->add('ip')
+            ->add('version')
             ->add('isEnabled')
         ;
     }
@@ -63,6 +65,7 @@ class Client extends Admin
             ->add('ip')
             ->add('key')
             ->add('note')
+            ->add('version')
             ->add('isEnabled', 'boolean')
             ->add('lastLogin', 'datetime')
             ->add('createdAt', 'datetime')
@@ -82,7 +85,7 @@ class Client extends Admin
             ->add('phone')
             ->add('url', 'url')
             ->add('isEnabled', 'boolean', ['editable' => true])
-            ->add('createdAt', 'datetime')
+            ->add('version')
             ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])
         ;
     }

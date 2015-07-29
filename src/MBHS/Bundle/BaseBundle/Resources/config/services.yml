@@ -25,6 +25,17 @@ services:
       calls:
           - [ setTranslationDomain, [MBHSBaseBundle]]
 
+    sonata.admin.version:
+          class: MBHS\Bundle\BaseBundle\Admin\Version
+          tags:
+              - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Versions"}
+          arguments:
+              - ~
+              - MBHS\Bundle\BaseBundle\Document\Version
+              - ~
+          calls:
+              - [ setTranslationDomain, [MBHSBaseBundle]]
+
     sonata.admin.user:
           class: MBHS\Bundle\BaseBundle\Admin\User
           tags:

@@ -8,11 +8,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
 class Log extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues =[
         '_page' => 1,
         '_sort_order' => 'DESC',
         '_sort_by' => 'createdAt'
-    );
+    ];
 
     protected function getTypesForFilter()
     {

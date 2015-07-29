@@ -142,6 +142,13 @@ class Client extends Base
     protected $note;
 
     /**
+     * @Gedmo\Versioned
+     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\BaseBundle\Document\Version", inversedBy="clients")
+     * @Assert\NotNull()
+     */
+    protected $version;
+
+    /**
      * @var array
      * @ODM\ReferenceMany(targetDocument="MBHS\Bundle\ClientBundle\Document\ChannelManager", mappedBy="client")
      */
@@ -447,5 +454,27 @@ class Client extends Base
         $this->note = $note;
 
         return $this;
+    }
+
+    /**
+     * Set version
+     *
+     * @param \MBHS\Bundle\BaseBundle\Document\Version $version
+     * @return self
+     */
+    public function setVersion(\MBHS\Bundle\BaseBundle\Document\Version $version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return \MBHS\Bundle\BaseBundle\Document\Version $version
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }

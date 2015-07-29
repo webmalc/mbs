@@ -114,12 +114,14 @@ class ChannelManager
      */
     private function getHotelVashotel(Request $request)
     {
-        $crawler = new Crawler($request->getContent());
-        $crawler->filter('request > hotel_id');
-        if (!count($crawler)) {
+        $xml = simplexml_load_string($request->getContent());
+
+        $res = $xml->xpath('hotel_id');
+
+        if (!count($res)) {
             throw new Exception('Invalid xml from Vashotel.ru');
         }
-        return (int) $crawler->text();
+        return (int) $res[0];
     }
 
     /**
