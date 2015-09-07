@@ -9,6 +9,10 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
+/**
+ * Class Unwelcome
+ * @author Aleksandr Arofikin <sashaaro@gmail.com>
+ */
 class Unwelcome extends Admin
 {
     protected $datagridValues = array(
@@ -56,6 +60,7 @@ class Unwelcome extends Admin
             ->addIdentifier('tourist.lastName')
             ->addIdentifier('tourist.birthday')
             //->add('client', 'sonata_type_model_list')
+            ->add('comment')
             ->add('isAggressor')
             ->add('createdAt')
             ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])

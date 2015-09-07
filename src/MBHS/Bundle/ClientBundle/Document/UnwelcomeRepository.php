@@ -10,5 +10,16 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  */
 class UnwelcomeRepository extends DocumentRepository
 {
-
+    /**
+     * @param Tourist $tourist
+     * @return Unwelcome|null
+     */
+    public function findOneByTourist(Tourist $tourist)
+    {
+        return $this->findOneBy([
+            'tourist.firstName' => $tourist->getFirstName(),
+            'tourist.lastName' => $tourist->getLastName(),
+            'tourist.birthday' => $tourist->getBirthday(),
+        ]);
+    }
 }

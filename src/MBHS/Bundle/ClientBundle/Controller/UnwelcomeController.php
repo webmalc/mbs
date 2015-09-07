@@ -17,72 +17,44 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UnwelcomeController extends BaseController
 {
-    /**
-     * @Route("/add")
-     * @Method("POST")
-     * @param $request \Symfony\Component\HttpFoundation\Request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addAction(Request $request)
+    private function getRequestData()
     {
-        $client = $this->getClient();
-
-        $data = json_decode($request->getContent(), true);
-        $unwelcome = new Unwelcome();
-        $unwelcome
-            ->setClient($client)
-            ->setComment($data['comment'])
-            ->setAggressor($data['isAggressor']);
-
-        $tourist = new Tourist();
-        $tourist
-            ->setBirthday($data['tourist']['birthday'])
-            ->setEmail($data['tourist']['email'])
-            ->setFirstName($data['tourist']['firstName'])
-            ->setLastName($data['tourist']['lastName'])
-            ->setPhone($data['tourist']['phone']);
-
-        $unwelcome->setTourist($tourist);
-
-        $this->dm->persist($unwelcome);
-        $this->dm->flush();
-
-        return new JsonResponse(['status' => true]);
+        $request = $this->get('request_stack')->getCurrentRequest();
+        return json_decode($request->getContent(), true);
     }
 
     /**
-     * @Route("/update")
-     * @Method("POST")
-     * @param $request \Symfony\Component\HttpFoundation\Request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Tourist|null
      */
-    public function updateAction(Request $request)
+    private function getRequestTourist()
     {
-        $data = json_decode($request->getContent(), true);
-        $client = $this->getClient();
+        $data = $this->getRequestData();
+        $tourist = null;
+        if($data && isset($data['tourist'])) {
+            $tourist = new Tourist();
+            $tourist
+                ->setBirthday($data['tourist']['birthday'])
+                ->setEmail($data['tourist']['email'])
+                ->setFirstName($data['tourist']['firstName'])
+                ->setLastName($data['tourist']['lastName'])
+                ->setPhone($data['tourist']['phone']);
+        }
+        return $tourist;
+    }
 
-        $birthday = $data['tourist']['birthday'];
-        $firstName = $data['tourist']['firstName'];
-        $lastName = $data['tourist']['lastName'];
-
-        /** @var Unwelcome|null $unwelcome */
-        $unwelcome = $this->getUnwelcomeRepository()->findOneBy([
-            'tourist.firstName' => $firstName,
-            'tourist.lastName' => $lastName,
-            'tourist.birthday' => $birthday,
-        ]);
-
-        if($unwelcome) {
-            //if($blackListInfo->getClient() == $client) {}
+    private function getRequestUnwelcome()
+    {
+        $data = $this->getRequestData();
+        $unwelcome = null;
+        if($data) {
+            $unwelcome = new Unwelcome();
             $unwelcome
+                ->setClient($this->getClient())
                 ->setComment($data['comment'])
                 ->setAggressor($data['isAggressor']);
-
-            $this->dm->persist($unwelcome);
-            $this->dm->flush();
         }
 
-        return new JsonResponse(['status' => true]);
+        return $unwelcome;
     }
 
     /**
@@ -106,6 +78,56 @@ class UnwelcomeController extends BaseController
     }
 
     /**
+     * @Route("/add")
+     * @Method("POST")
+     * @param $request \Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addAction(Request $request)
+    {
+        $client = $this->getClient();
+
+        $unwelcome = $this->getRequestUnwelcome();
+        $tourist = $this->getRequestTourist();
+
+        $unwelcome->setTourist($tourist);
+
+        $this->dm->persist($unwelcome);
+        $this->dm->flush();
+
+        return new JsonResponse(['status' => true]);
+    }
+
+    /**
+     * @Route("/update")
+     * @Method("POST")
+     * @param $request \Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function updateAction(Request $request)
+    {
+        $client = $this->getClient();
+
+        $tourist = $this->getRequestTourist();
+
+        $requestUnwelcome = $this->getRequestUnwelcome();
+        /** @var Unwelcome|null $unwelcome */
+        $unwelcome = $this->getUnwelcomeRepository()->findOneByTourist($tourist);
+
+        if($requestUnwelcome && $unwelcome) {
+            //if($blackListInfo->getClient() == $client) {}
+            $unwelcome
+                ->setComment($requestUnwelcome->getComment())
+                ->setAggressor($requestUnwelcome->getIsAggressor());
+
+            $this->dm->persist($unwelcome);
+            $this->dm->flush();
+        }
+
+        return new JsonResponse(['status' => true]);
+    }
+
+    /**
      * @Route("/find_by_tourist")
      * @Method("POST")
      * @param $request \Symfony\Component\HttpFoundation\Request
@@ -116,14 +138,10 @@ class UnwelcomeController extends BaseController
         $client = $this->getClient();
         $unwelcome = null;
 
-        $data = json_decode($request->getContent(), true);
-        if ($data) {
+        $tourist = $this->getRequestTourist();
+        if ($tourist) {
             /** @var Unwelcome|null $unwelcome */
-            $unwelcome = $this->getUnwelcomeRepository()->findOneBy([
-                'tourist.firstName' => $data['tourist']['firstName'],
-                'tourist.lastName' => $data['tourist']['lastName'],
-                'tourist.birthday' => $data['tourist']['birthday'],
-            ]);
+            $unwelcome = $this->getUnwelcomeRepository()->findOneByTourist($tourist);
         }
 
         return new JsonResponse([
@@ -142,14 +160,11 @@ class UnwelcomeController extends BaseController
     {
         $client = $this->getClient();
 
-        $data = json_decode($request->getContent(), true);
-        if ($data) {
+        $tourist = $this->getRequestTourist();
+        if ($tourist) {
             /** @var Unwelcome|null $unwelcome */
-            $unwelcome = $this->getUnwelcomeRepository()->findOneBy([
-                'tourist.firstName' => $data['tourist']['firstName'],
-                'tourist.lastName' => $data['tourist']['lastName'],
-                'tourist.birthday' => $data['tourist']['birthday'],
-            ]);
+            $unwelcome = $this->getUnwelcomeRepository()->findOneByTourist($tourist);
+
             if($unwelcome) {
                 $this->dm->remove($unwelcome);
                 $this->dm->flush();
