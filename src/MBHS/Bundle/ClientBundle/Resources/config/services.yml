@@ -1,53 +1,64 @@
 services:
-  mbhs.request:
-          class: MBHS\Bundle\ClientBundle\Service\Request
-          arguments: [@service_container]
+    mbhs.request:
+        class: MBHS\Bundle\ClientBundle\Service\Request
+        arguments: [@service_container]
 
-  mbhs.channelmanager:
-            class: MBHS\Bundle\ClientBundle\Service\ChannelManager
-            arguments: [@service_container]
+    mbhs.channelmanager:
+        class: MBHS\Bundle\ClientBundle\Service\ChannelManager
+        arguments: [@service_container]
 
-  #Admin
-  sonata.admin.pirate_client:
-          class: MBHS\Bundle\ClientBundle\Admin\PirateClient
-          tags:
-              - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Pirates"}
-          arguments:
-              - ~
-              - MBHS\Bundle\ClientBundle\Document\PirateClient
-              - ~
-          calls:
-              - [ setTranslationDomain, [MBHSClientBundle]]
+    #Admin
+    sonata.admin.pirate_client:
+        class: MBHS\Bundle\ClientBundle\Admin\PirateClient
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Pirates"}
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\PirateClient
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]
 
-  sonata.admin.package:
-            class: MBHS\Bundle\ClientBundle\Admin\Package
-            tags:
-                - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Packages"}
-            arguments:
-                - ~
-                - MBHS\Bundle\ClientBundle\Document\Package
-                - ~
-            calls:
-                - [ setTranslationDomain, [MBHSClientBundle]]
+    sonata.admin.package:
+        class: MBHS\Bundle\ClientBundle\Admin\Package
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Logs", label: "Packages"}
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\Package
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]
 
-  sonata.admin.client:
-            class: MBHS\Bundle\ClientBundle\Admin\Client
-            tags:
-                - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Clients"}
-            arguments:
-                - ~
-                - MBHS\Bundle\ClientBundle\Document\Client
-                - ~
-            calls:
-                - [ setTranslationDomain, [MBHSClientBundle]]
+    sonata.admin.client:
+        class: MBHS\Bundle\ClientBundle\Admin\Client
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Clients"}
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\Client
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]
 
-  sonata.admin.channelmanager:
-              class: MBHS\Bundle\ClientBundle\Admin\ChannelManager
-              tags:
-                  - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "ChannelManagers" }
-              arguments:
-                  - ~
-                  - MBHS\Bundle\ClientBundle\Document\ChannelManager
-                  - ~
-              calls:
-                  - [ setTranslationDomain, [MBHSClientBundle]]
+    sonata.admin.channelmanager:
+        class: MBHS\Bundle\ClientBundle\Admin\ChannelManager
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "ChannelManagers" }
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\ChannelManager
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]
+
+    sonata.admin.unwelcome:
+        class: MBHS\Bundle\ClientBundle\Admin\Unwelcome
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Unwelcome guests"}
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\Unwelcome
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]

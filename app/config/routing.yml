@@ -15,4 +15,3 @@ mbhs_client:
     resource: "@MBHSClientBundle/Controller/"
     type:     annotation
     prefix:   /client
-
