@@ -47,12 +47,12 @@ class UnwelcomeController extends BaseController
     {
         $data = $this->getRequestData();
         $unwelcome = null;
-        if($data) {
+        if($data && isset($data['unwelcome'])) {
             $unwelcome = new Unwelcome();
             $unwelcome
                 ->setClient($this->getClient())
-                ->setComment($data['comment'])
-                ->setAggressor($data['isAggressor']);
+                ->setComment($data['unwelcome']['comment'])
+                ->setAggressor($data['unwelcome']['isAggressor']);
         }
 
         return $unwelcome;
