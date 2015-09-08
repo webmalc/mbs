@@ -28,8 +28,8 @@ class Tourist
      */
     protected $patronymic;
     /**
-     * @var string
-     * @ODM\String()
+     * @var \DateTime|null
+     * @ODM\Date()
      */
     protected $birthday;
     /**
@@ -103,7 +103,7 @@ class Tourist
     }
 
     /**
-     * @return mixed
+     * @return \DateTime|null
      */
     public function getBirthday()
     {
@@ -111,10 +111,10 @@ class Tourist
     }
 
     /**
-     * @param mixed $birthday
+     * @param \DateTime|null $birthday
      * @return self
      */
-    public function setBirthday($birthday)
+    public function setBirthday(\DateTime $birthday = null)
     {
         $this->birthday = $birthday;
         return $this;

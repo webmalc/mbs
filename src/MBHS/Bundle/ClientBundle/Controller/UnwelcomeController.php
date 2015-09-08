@@ -33,7 +33,7 @@ class UnwelcomeController extends BaseController
         if($data && isset($data['tourist'])) {
             $tourist = new Tourist();
             $tourist
-                ->setBirthday($data['tourist']['birthday'])
+                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']))
                 ->setEmail($data['tourist']['email'])
                 ->setFirstName($data['tourist']['firstName'])
                 ->setLastName($data['tourist']['lastName'])
@@ -87,12 +87,21 @@ class UnwelcomeController extends BaseController
     {
         $client = $this->getClient();
 
-        $unwelcome = $this->getRequestUnwelcome();
-        $tourist = $this->getRequestTourist();
+        $requestUnwelcome = $this->getRequestUnwelcome();
+        $requestTourist = $this->getRequestTourist();
+        $requestUnwelcome->setTourist($requestTourist);
 
-        $unwelcome->setTourist($tourist);
+        if(!$requestUnwelcome || !$requestTourist) {
+            return new JsonResponse(['status' => false]);
+        }
 
-        $this->dm->persist($unwelcome);
+        /** @var Unwelcome|null $unwelcome */
+        $unwelcome = $this->getUnwelcomeRepository()->findOneByTourist($requestTourist);
+        if($unwelcome) {
+            return new JsonResponse(['status' => false]);
+        }
+
+        $this->dm->persist($requestUnwelcome);
         $this->dm->flush();
 
         return new JsonResponse(['status' => true]);

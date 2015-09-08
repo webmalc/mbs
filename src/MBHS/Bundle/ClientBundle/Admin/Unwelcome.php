@@ -26,7 +26,7 @@ class Unwelcome extends Admin
         /** @var DocumentManager $dm */
         $dm  = $this->getConfigurationPool()->getContainer()->get('doctrine_mongodb')->getManager();
         $types = $dm
-            ->getRepository('MBHSClientBundle:BlackListInfo')
+            ->getRepository('MBHSClientBundle:Unwelcome')
             ->createQueryBuilder('q')
             //->distinct('title')
             ->getQuery()
@@ -41,8 +41,10 @@ class Unwelcome extends Admin
     {
         $formMapper
             //->add('tourist', 'sonata_type_model_list', ['label' => 'Tourist'])
+            //->add('tourist.firstName')
             ->add('client', 'sonata_type_model_list', ['btn_delete' => false])
             ->add('isAggressor')
+            ->add('comment', 'textarea')
         ;
     }
 
