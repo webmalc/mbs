@@ -125,10 +125,9 @@ class UnwelcomeController extends BaseController
     /**
      * @Route("/update")
      * @Method("POST")
-     * @param $request \Symfony\Component\HttpFoundation\Request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function updateAction(Request $request)
+    public function updateAction()
     {
         $client = $this->getClient();
 
@@ -163,10 +162,9 @@ class UnwelcomeController extends BaseController
     /**
      * @Route("/find_by_tourist")
      * @Method("POST")
-     * @param $request \Symfony\Component\HttpFoundation\Request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function findByTourist(Request $request)
+    public function findByTourist()
     {
         $client = $this->getClient();
         $unwelcomeHistory = null;
@@ -195,10 +193,9 @@ class UnwelcomeController extends BaseController
     /**
      * @Route("/delete_by_tourist")
      * @Method("POST")
-     * @param $request \Symfony\Component\HttpFoundation\Request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteByTourist(Request $request)
+    public function deleteByTourist()
     {
         $client = $this->getClient();
 
@@ -209,14 +206,12 @@ class UnwelcomeController extends BaseController
             $unwelcomeHistory = $this->getUnwelcomeHistoryRepository()->findOneByTourist($tourist);
 
             if($unwelcomeHistory) {
-                dump(iterator_to_array($unwelcomeHistory->getItems()));
                 foreach($unwelcomeHistory->getItems() as $unwelcome) {
                     if($unwelcome->getClient() == $client) {
                         $successDeleted = $unwelcomeHistory->removeItem($unwelcome);
                         break;
                     }
                 }
-                $this->dm->persist($unwelcomeHistory);
                 $this->dm->flush();
             }
         }

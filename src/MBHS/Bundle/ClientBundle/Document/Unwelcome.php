@@ -3,7 +3,6 @@
 namespace MBHS\Bundle\ClientBundle\Document;
 
 use Gedmo\Blameable\Traits\BlameableDocument;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableDocument;
 use Gedmo\Timestampable\Traits\TimestampableDocument;
 use MBHS\Bundle\BaseBundle\Document\BaseDocument as Base;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -11,28 +10,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
+ * Class Unwelcome
+ * @author Aleksandr Arofikin <sashaaro@gmail.com>
+ *
  * @ODM\EmbeddedDocument
  * @Gedmo\Loggable
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Unwelcome extends Base implements \JsonSerializable
 {
-    /**
-     * Hook timestampable behavior
-     * up\DateTimes createdAt, up\DateTimedAt fields
-     */
     use TimestampableDocument;
-
-    /**
-     * Hook softdeleteable behavior
-     * deletedAt field
-     */
-    use SoftDeleteableDocument;
-
-    /**
-     * Hook blameable behavior
-     * createdBy&up\DateTimedBy fields
-     */
     use BlameableDocument;
 
     /**

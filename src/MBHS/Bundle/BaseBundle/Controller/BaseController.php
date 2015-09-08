@@ -40,7 +40,7 @@ class BaseController extends Controller
     /**
      * Get entity logs
      * @param object $entity
-     * @return \Gedmo\Loggable\Entity\LogEntr[]|null
+     * @return \Gedmo\Loggable\Entity\LogEntry[]|null
      */
     public function logs($entity)
     {

@@ -63,10 +63,12 @@ class UnwelcomeHistory extends Base implements \JsonSerializable
 
     /**
      * @param Tourist|null $tourist
+     * @return $this
      */
     public function setTourist(Tourist $tourist = null)
     {
         $this->tourist = $tourist;
+        return $this;
     }
 
     /**
@@ -77,25 +79,37 @@ class UnwelcomeHistory extends Base implements \JsonSerializable
         return $this->items;
     }
 
+    /**
+     * @param Unwelcome $unwelcome
+     * @return $this
+     */
     public function removeItem(Unwelcome $unwelcome)
     {
         $this->items->removeElement($unwelcome);
+        return $this;
     }
 
     /**
      * @param Unwelcome[] $items
+     * @return $this
      */
     public function setItems($items)
     {
         $this->items = $items;
+        return $this;
     }
 
     /**
      * @param Unwelcome $item
+     * @return $this
      */
     public function addItem(Unwelcome $item)
     {
-        $this->items[] = $item;
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+        }
+
+        return $this;
     }
 
     public function jsonSerialize()
