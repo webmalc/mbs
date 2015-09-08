@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ODM\Document(collection="Unwelcome", repositoryClass="MBHS\Bundle\ClientBundle\Document\UnwelcomeRepository")
+ * @ODM\EmbeddedDocument
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -44,12 +44,6 @@ class Unwelcome extends Base implements \JsonSerializable
     protected $client;
 
     /**
-     * @var Tourist
-     * @ODM\EmbedOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Tourist")
-     */
-    protected $tourist;
-
-    /**
      * @var bool
      * @ODM\Boolean()
      */
@@ -73,26 +67,10 @@ class Unwelcome extends Base implements \JsonSerializable
      * @param Client $client
      * @return self
      */
-    public function setClient($client)
+    public function setClient(Client $client = null)
     {
         $this->client = $client;
         return $this;
-    }
-
-    /**
-     * @return Tourist|null
-     */
-    public function getTourist()
-    {
-        return $this->tourist;
-    }
-
-    /**
-     * @param Tourist|null $tourist
-     */
-    public function setTourist(Tourist $tourist = null)
-    {
-        $this->tourist = $tourist;
     }
 
     /**
@@ -135,6 +113,7 @@ class Unwelcome extends Base implements \JsonSerializable
         return [
             'comment' => $this->getComment(),
             'isAggressor' => $this->getIsAggressor(),
+            'createdAt' => $this->getCreatedAt() ? $this->getCreatedAt()->format('d.m.Y') : null,
         ];
     }
 }

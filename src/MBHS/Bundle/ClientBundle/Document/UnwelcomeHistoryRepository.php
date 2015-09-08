@@ -5,14 +5,14 @@ namespace MBHS\Bundle\ClientBundle\Document;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
 /**
- * Class UnwelcomeRepository
+ * Class UnwelcomeHistoryRepository
  * @author Aleksandr Arofikin <sashaaro@gmail.com>
  */
-class UnwelcomeRepository extends DocumentRepository
+class UnwelcomeHistoryRepository extends DocumentRepository
 {
     /**
      * @param Tourist $tourist
-     * @return Unwelcome|null
+     * @return UnwelcomeHistory|null
      */
     public function findOneByTourist(Tourist $tourist)
     {

@@ -53,12 +53,12 @@ services:
             - [ setTranslationDomain, [MBHSClientBundle]]
 
     sonata.admin.unwelcome:
-        class: MBHS\Bundle\ClientBundle\Admin\Unwelcome
+        class: MBHS\Bundle\ClientBundle\Admin\UnwelcomeHistory
         tags:
-            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Unwelcome guests"}
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Unwelcome guests history"}
         arguments:
             - ~
-            - MBHS\Bundle\ClientBundle\Document\Unwelcome
+            - MBHS\Bundle\ClientBundle\Document\UnwelcomeHistory
             - ~
         calls:
             - [ setTranslationDomain, [MBHSClientBundle]]

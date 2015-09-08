@@ -10,10 +10,10 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class Unwelcome
+ * Class UnwelcomeHistory
  * @author Aleksandr Arofikin <sashaaro@gmail.com>
  */
-class Unwelcome extends Admin
+class UnwelcomeHistory extends Admin
 {
     protected $datagridValues = array(
         '_page' => 1,
@@ -26,7 +26,7 @@ class Unwelcome extends Admin
         /** @var DocumentManager $dm */
         $dm  = $this->getConfigurationPool()->getContainer()->get('doctrine_mongodb')->getManager();
         $types = $dm
-            ->getRepository('MBHSClientBundle:Unwelcome')
+            ->getRepository('MBHSClientBundle:UnwelcomeHistory')
             ->createQueryBuilder('q')
             //->distinct('title')
             ->getQuery()
@@ -41,17 +41,22 @@ class Unwelcome extends Admin
     {
         $formMapper
             //->add('tourist', 'sonata_type_model_list', ['label' => 'Tourist'])
-            //->add('tourist.firstName')
-            ->add('client', 'sonata_type_model_list', ['btn_delete' => false])
-            ->add('isAggressor')
-            ->add('comment', 'textarea')
+            ->add('tourist.firstName')
+            ->add('tourist.firstName')
+            //->add('items', 'sonata_type_collection')
+            //->add('client', 'sonata_type_model_list', ['btn_delete' => false])
+            //->add('isAggressor')
+            //->add('comment', 'textarea')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('client')
+            ->add('tourist.firstName')
+            ->add('tourist.lastName')
+            ->add('tourist.birthday')
+            //->add('client')
         ;
     }
 
@@ -61,9 +66,9 @@ class Unwelcome extends Admin
             ->addIdentifier('tourist.firstName')
             ->addIdentifier('tourist.lastName')
             ->addIdentifier('tourist.birthday')
-            //->add('client', 'sonata_type_model_list')
-            ->add('comment')
-            ->add('isAggressor')
+            ->add('items')
+            //->add('comment')
+            //->add('isAggressor')
             ->add('createdAt')
             ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])
         ;

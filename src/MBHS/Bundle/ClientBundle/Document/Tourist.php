@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ODM\EmbeddedDocument
  * @Gedmo\Loggable
  */
-class Tourist
+class Tourist implements \JsonSerializable
 {
     /**
      * @var string
@@ -174,5 +174,15 @@ class Tourist
         return $this;
     }
 
-
+    public function jsonSerialize()
+    {
+        return [
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'patronymic' => $this->patronymic,
+            'birthday' => $this->birthday,
+            'phone' => $this->phone,
+            'email' => $this->email
+        ];
+    }
 }
