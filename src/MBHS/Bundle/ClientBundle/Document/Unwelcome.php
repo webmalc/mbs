@@ -30,6 +30,12 @@ class Unwelcome extends Base implements \JsonSerializable
     protected $client;
 
     /**
+     * @var Hotel
+     * @ODM\EmbedOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel")
+     */
+    protected $hotel;
+
+    /**
      * @var bool
      * @ODM\Boolean()
      */
@@ -42,6 +48,22 @@ class Unwelcome extends Base implements \JsonSerializable
     protected $comment;
 
     /**
+     * @var \DateTime
+     * @Gedmo\Versioned
+     * @ODM\Date()
+     * @Assert\DateTime()
+     */
+    protected $arrivalTime;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Versioned
+     * @ODM\Date()
+     * @Assert\DateTime()
+     */
+    protected $departureTime;
+
+    /**
      * @return Client
      */
     public function getClient()
@@ -51,11 +73,29 @@ class Unwelcome extends Base implements \JsonSerializable
 
     /**
      * @param Client $client
-     * @return self
+     * @return $this
      */
     public function setClient(Client $client = null)
     {
         $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @return Hotel|null
+     */
+    public function getHotel()
+    {
+        return $this->hotel;
+    }
+
+    /**
+     * @param Hotel|null $hotel
+     * @return $this
+     */
+    public function setHotel(Hotel $hotel = null)
+    {
+        $this->hotel = $hotel;
         return $this;
     }
 
@@ -69,10 +109,12 @@ class Unwelcome extends Base implements \JsonSerializable
 
     /**
      * @param boolean $isAggressor
+     * @return $this
      */
     public function setAggressor($isAggressor)
     {
         $this->isAggressor = $isAggressor;
+        return $this;
     }
 
     /**
@@ -85,12 +127,49 @@ class Unwelcome extends Base implements \JsonSerializable
 
     /**
      * @param string $comment
-     * @return self
+     * @return $this
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
         return $this;
+    }
+
+
+    /**
+     * @param \DateTime $arrivalTime
+     * @return $this
+     */
+    public function setArrivalTime(\DateTime $arrivalTime = null)
+    {
+        $this->arrivalTime = $arrivalTime;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime $arrivalTime
+     */
+    public function getArrivalTime()
+    {
+        return $this->arrivalTime;
+    }
+
+    /**
+     * @param \DateTime $departureTime
+     * @return $this
+     */
+    public function setDepartureTime(\DateTime $departureTime = null)
+    {
+        $this->departureTime = $departureTime;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime $departureTime
+     */
+    public function getDepartureTime()
+    {
+        return $this->departureTime;
     }
 
 
@@ -100,6 +179,9 @@ class Unwelcome extends Base implements \JsonSerializable
             'comment' => $this->getComment(),
             'isAggressor' => $this->getIsAggressor(),
             'createdAt' => $this->getCreatedAt() ? $this->getCreatedAt()->format('d.m.Y') : null,
+            'hotel' => $this->getHotel(),
+            'arrivalTime' => $this->getArrivalTime() ? $this->getArrivalTime()->format('d.m.Y') : null,
+            'departureTime' => $this->getDepartureTime() ? $this->getDepartureTime()->format('d.m.Y') : null,
         ];
     }
 }

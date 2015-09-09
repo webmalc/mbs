@@ -3,13 +3,13 @@
 namespace MBHS\Bundle\ClientBundle\Controller;
 
 use MBHS\Bundle\BaseBundle\Controller\BaseController;
+use MBHS\Bundle\ClientBundle\Document\Hotel;
 use MBHS\Bundle\ClientBundle\Document\Tourist;
 use MBHS\Bundle\ClientBundle\Document\Unwelcome;
 use MBHS\Bundle\ClientBundle\Document\UnwelcomeHistory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class BlackListController
@@ -48,14 +48,39 @@ class UnwelcomeController extends BaseController
         $data = $this->getRequestData();
         $unwelcome = null;
         if($data && isset($data['unwelcome'])) {
+            $data = $data['unwelcome'];
             $unwelcome = new Unwelcome();
             $unwelcome
                 ->setClient($this->getClient())
-                ->setComment($data['unwelcome']['comment'])
-                ->setAggressor($data['unwelcome']['isAggressor']);
+                ->setComment($data['comment'])
+                ->setAggressor($data['isAggressor'])
+                ->setHotel($this->getRequestHotel());
+
+            if(isset($data['arrivalTime']) && isset($data['departureTime'])) {
+                $unwelcome
+                    ->setArrivalTime($this->get('mbhs.helper')->getDateFromString($data['arrivalTime']))
+                    ->setDepartureTime($this->get('mbhs.helper')->getDateFromString($data['departureTime']));
+            }
         }
 
         return $unwelcome;
+    }
+
+    /**
+     * @return Hotel|null
+     */
+    private function getRequestHotel()
+    {
+        $data = $this->getRequestData();
+        $hotel = null;
+        if($data && isset($data['hotel'])) {
+            $hotel = new Hotel();
+            $hotel
+                ->setTitle($data['hotel']['title'])
+                ->setCity($data['hotel']['city']);
+        }
+
+        return $hotel;
     }
 
     /**
@@ -106,7 +131,7 @@ class UnwelcomeController extends BaseController
             if($unwelcome) {
                 return new JsonResponse([
                     'status' => false,
-                    'message' => 'Can not add new unwelcome. Unwelcome for this tourist is already exists.'
+                    'message' => 'Can not add new unwelcome. Unwelcome for this tourist already exists.'
                 ]);
             }
         } else {
