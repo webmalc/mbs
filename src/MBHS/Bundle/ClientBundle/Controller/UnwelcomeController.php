@@ -246,4 +246,26 @@ class UnwelcomeController extends BaseController
             'successDeleted' => $successDeleted,
         ]);
     }
+
+    /**
+     * @Route("/has_unwelcome_history")
+     * @Method("POST")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function hasUnwelcomeHistory()
+    {
+        $client = $this->getClient();
+
+        $requestTourist = $this->getRequestTourist();
+        if($requestTourist) {
+            return new JsonResponse([
+                'status' => true,
+                'result' => $this->getUnwelcomeHistoryRepository()->isUnwelcome($requestTourist)
+            ]);
+        }
+        return new JsonResponse([
+            'status' => false,
+            'error' => 'Expect request with tourist'
+        ]);
+    }
 }

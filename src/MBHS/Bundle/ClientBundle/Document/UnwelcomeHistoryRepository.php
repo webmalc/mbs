@@ -22,4 +22,14 @@ class UnwelcomeHistoryRepository extends DocumentRepository
             'tourist.birthday' => $tourist->getBirthday(),
         ]);
     }
+
+    /**
+     * @param Tourist $tourist
+     * @return bool
+     */
+    public function isUnwelcome(Tourist $tourist)
+    {
+        $unwelcomeHistory = $this->findOneByTourist($tourist);
+        return $unwelcomeHistory ? !empty($unwelcomeHistory->getItems()) : false;
+    }
 }
