@@ -32,13 +32,15 @@ class UnwelcomeController extends BaseController
         $data = $this->getRequestData();
         $tourist = null;
         if($data && isset($data['tourist'])) {
+            $data = $data['tourist'];
             $tourist = new Tourist();
             $tourist
-                ->setFirstName($data['tourist']['firstName'])
-                ->setLastName($data['tourist']['lastName'])
-                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']))
-                ->setEmail($data['tourist']['email'])
-                ->setPhone($data['tourist']['phone']);
+                ->setFirstName($data['firstName'])
+                ->setLastName($data['lastName'])
+                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['birthday']))
+                ->setEmail($data['email'])
+                ->setPhone($data['phone'])
+                ->setCitizenship($data['citizenship']);
         }
         return $tourist;
     }

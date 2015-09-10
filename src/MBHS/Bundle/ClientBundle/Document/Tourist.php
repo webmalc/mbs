@@ -49,6 +49,12 @@ class Tourist implements \JsonSerializable
     protected $communicationLanguage;
 
     /**
+     * @var string
+     * @ODM\String()
+     */
+    protected $citizenship;
+
+    /**
      * @return mixed
      */
     public function getFirstName()
@@ -174,15 +180,34 @@ class Tourist implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getCitizenship()
+    {
+        return $this->citizenship;
+    }
+
+    /**
+     * @param string $citizenship
+     * @return $this
+     */
+    public function setCitizenship($citizenship)
+    {
+        $this->citizenship = $citizenship;
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
             'patronymic' => $this->patronymic,
-            'birthday' => $this->birthday,
+            'birthday' => $this->getBirthday() ? $this->getBirthday()->format('d.m.Y') : null,
             'phone' => $this->phone,
-            'email' => $this->email
+            'email' => $this->email,
+            'citizenship' => $this->citizenship,
         ];
     }
 }
