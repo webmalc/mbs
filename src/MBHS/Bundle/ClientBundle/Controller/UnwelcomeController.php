@@ -34,10 +34,10 @@ class UnwelcomeController extends BaseController
         if($data && isset($data['tourist'])) {
             $tourist = new Tourist();
             $tourist
-                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']))
-                ->setEmail($data['tourist']['email'])
                 ->setFirstName($data['tourist']['firstName'])
                 ->setLastName($data['tourist']['lastName'])
+                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']))
+                ->setEmail($data['tourist']['email'])
                 ->setPhone($data['tourist']['phone']);
         }
         return $tourist;
@@ -51,10 +51,17 @@ class UnwelcomeController extends BaseController
             $data = $data['unwelcome'];
             $unwelcome = new Unwelcome();
             $unwelcome
-                ->setClient($this->getClient())
+                ->setFoul($data['foul'])
+                ->setAggression($data['aggression'])
+                ->setInadequacy($data['inadequacy'])
+                ->setDrunk($data['drunk'])
+                ->setDrugs($data['drugs'])
+                ->setDestruction($data['destruction'])
+                ->setMaterialDamage($data['materialDamage'])
                 ->setComment($data['comment'])
-                ->setAggressor($data['isAggressor'])
-                ->setHotel($this->getRequestHotel());
+                ->setHotel($this->getRequestHotel())
+                ->setClient($this->getClient())
+            ;
 
             if(isset($data['arrivalTime']) && isset($data['departureTime'])) {
                 $unwelcome
@@ -172,8 +179,15 @@ class UnwelcomeController extends BaseController
             if($requestUnwelcome && $unwelcome) {
                 //if($blackListInfo->getClient() == $client) {}
                 $unwelcome
+                    ->setFoul($requestUnwelcome->getFoul())
+                    ->setAggression($requestUnwelcome->getAggression())
+                    ->setInadequacy($requestUnwelcome->getInadequacy())
+                    ->setDrunk($requestUnwelcome->getDrunk())
+                    ->setDrugs($requestUnwelcome->getDrugs())
+                    ->setDestruction($requestUnwelcome->getDestruction())
+                    ->setMaterialDamage($requestUnwelcome->getMaterialDamage())
                     ->setComment($requestUnwelcome->getComment())
-                    ->setAggressor($requestUnwelcome->getIsAggressor());
+                ;
 
                 $this->dm->persist($unwelcomeHistory);
                 $this->dm->persist($unwelcome);

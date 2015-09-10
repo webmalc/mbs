@@ -29,7 +29,12 @@ class UnwelcomeHistoryRepository extends DocumentRepository
      */
     public function isUnwelcome(Tourist $tourist)
     {
-        $unwelcomeHistory = $this->findOneByTourist($tourist);
-        return $unwelcomeHistory ? !empty($unwelcomeHistory->getItems()) : false;
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->field('tourist.firstName')->equals($tourist->getFirstName());
+        $queryBuilder->field('tourist.lastName')->equals($tourist->getLastName());
+        $queryBuilder->field('tourist.birthday')->equals($tourist->getBirthday());
+        $queryBuilder->field('items')->exists(true);
+        $queryBuilder->field('items')->not($queryBuilder->expr()->size(0));
+        return $queryBuilder->getQuery()->count() > 0;
     }
 }
