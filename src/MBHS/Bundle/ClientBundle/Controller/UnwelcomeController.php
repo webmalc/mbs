@@ -60,6 +60,9 @@ class UnwelcomeController extends BaseController
                 ->setDrugs($data['drugs'])
                 ->setDestruction($data['destruction'])
                 ->setMaterialDamage($data['materialDamage'])
+                ->setTouristCitizenship($data['touristCitizenship'])
+                ->setTouristPhone($data['touristPhone'])
+                ->setTouristEmail($data['touristEmail'])
                 ->setComment($data['comment'])
                 ->setHotel($this->getRequestHotel())
                 ->setClient($this->getClient())
@@ -188,6 +191,9 @@ class UnwelcomeController extends BaseController
                     ->setDrugs($requestUnwelcome->getDrugs())
                     ->setDestruction($requestUnwelcome->getDestruction())
                     ->setMaterialDamage($requestUnwelcome->getMaterialDamage())
+                    ->setTouristCitizenship($requestUnwelcome->getTouristCitizenship())
+                    ->setTouristPhone($requestUnwelcome->getTouristPhone())
+                    ->setTouristEmail($requestUnwelcome->getTouristEmail())
                     ->setComment($requestUnwelcome->getComment())
                 ;
 

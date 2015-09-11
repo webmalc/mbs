@@ -70,6 +70,21 @@ class Unwelcome extends Base implements \JsonSerializable
      * @ODM\Integer()
      */
     protected $materialDamage;
+    /**
+     * @var string
+     * @ODM\String()
+     */
+    protected $touristCitizenship;
+    /**
+     * @var string
+     * @ODM\String()
+     */
+    protected $touristEmail;
+    /**
+     * @var string
+     * @ODM\String()
+     */
+    protected $touristPhone;
 
     /**
      * @var string
@@ -258,6 +273,60 @@ class Unwelcome extends Base implements \JsonSerializable
     /**
      * @return string
      */
+    public function getTouristCitizenship()
+    {
+        return $this->touristCitizenship;
+    }
+
+    /**
+     * @param string $touristCitizenship
+     * @return $this
+     */
+    public function setTouristCitizenship($touristCitizenship)
+    {
+        $this->touristCitizenship = $touristCitizenship;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTouristEmail()
+    {
+        return $this->touristEmail;
+    }
+
+    /**
+     * @param string $touristEmail
+     * @return $this
+     */
+    public function setTouristEmail($touristEmail)
+    {
+        $this->touristEmail = $touristEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTouristPhone()
+    {
+        return $this->touristPhone;
+    }
+
+    /**
+     * @param string $touristPhone
+     * @return $this
+     */
+    public function setTouristPhone($touristPhone)
+    {
+        $this->touristPhone = $touristPhone;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -322,7 +391,9 @@ class Unwelcome extends Base implements \JsonSerializable
             'destruction' => $this->getDestruction(),
             'materialDamage' => $this->getMaterialDamage(),
             'comment' => $this->getComment(),
-
+            'touristCitizenship' => $this->getTouristCitizenship(),
+            'touristEmail' => $this->getTouristEmail(),
+            'touristPhone' => $this->getTouristPhone(),
             'createdAt' => $this->getCreatedAt() ? $this->getCreatedAt()->format('d.m.Y') : null,
             'hotel' => $this->getHotel(),
             'arrivalTime' => $this->getArrivalTime() ? $this->getArrivalTime()->format('d.m.Y') : null,
