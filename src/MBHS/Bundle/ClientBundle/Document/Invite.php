@@ -35,7 +35,7 @@ class Invite
 
     /**
      * @var Hotel
-     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel")
+     * @ODM\EmbedOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel")
      */
     protected $hotel;
 
