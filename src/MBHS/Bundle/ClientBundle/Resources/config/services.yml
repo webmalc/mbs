@@ -62,3 +62,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [MBHSClientBundle]]
+
+    sonata.admin.invite:
+        class: MBHS\Bundle\ClientBundle\Admin\Invite
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: "Clients", label: "Invite"}
+        arguments:
+            - ~
+            - MBHS\Bundle\ClientBundle\Document\Invite
+            - ~
+        calls:
+            - [ setTranslationDomain, [MBHSClientBundle]]
