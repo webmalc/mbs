@@ -6,6 +6,11 @@ services:
       class: MBHS\Bundle\BaseBundle\Service\Epochta
       arguments: [@kernel]
 
+    mbh.get_set_method_normalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     doctrine_odm.mongodb.validator.unique:
           class: MBHS\Bundle\BaseBundle\Validator\Constraints\UniqueEntityValidator
           arguments:

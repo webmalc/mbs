@@ -27,11 +27,12 @@ class Helper
     /**
      * @param string = $string
      * @param string $format
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDateFromString($string, $format = "d.m.Y")
     {
-        return \DateTime::createFromFormat($format . ' H:i:s', $string . ' 00:00:00');
+        $dateTime = \DateTime::createFromFormat($format . ' H:i:s', $string . ' 00:00:00');
+        return $dateTime ? $dateTime : null;
     }
 
     /**

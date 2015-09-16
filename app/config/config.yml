@@ -3,6 +3,8 @@ imports:
     - { resource: security.yml }
 
 framework:
+    serializer:
+        enabled: true
     #esi:             ~
     translator:      { fallback: "%locale%" }
     secret:          "%secret%"

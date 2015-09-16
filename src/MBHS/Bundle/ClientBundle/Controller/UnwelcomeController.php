@@ -21,7 +21,7 @@ class UnwelcomeController extends BaseController
     private function getRequestData()
     {
         $request = $this->get('request_stack')->getCurrentRequest();
-        return json_decode($request->getContent(), true);
+        return $this->get('serializer')->decode($request->getContent(), 'json');
     }
 
     /**
@@ -30,19 +30,11 @@ class UnwelcomeController extends BaseController
     private function getRequestTourist()
     {
         $data = $this->getRequestData();
-        $tourist = null;
         if($data && isset($data['tourist'])) {
-            $data = $data['tourist'];
-            $tourist = new Tourist();
-            $tourist
-                ->setFirstName($data['firstName'])
-                ->setLastName($data['lastName'])
-                ->setBirthday($this->get('mbhs.helper')->getDateFromString($data['birthday']))
-                ->setEmail($data['email'])
-                ->setPhone($data['phone'])
-                ->setCitizenship($data['citizenship']);
+            $data['tourist']['birthday'] = $this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']);
+            return $this->get('serializer')->denormalize($data['tourist'], Tourist::class);
         }
-        return $tourist;
+        return null;
     }
 
     private function getRequestUnwelcome()
