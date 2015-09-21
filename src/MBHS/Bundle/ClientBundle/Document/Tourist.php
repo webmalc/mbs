@@ -55,6 +55,12 @@ class Tourist implements \JsonSerializable
     protected $citizenship;
 
     /**
+     * @var DocumentRelation
+     * @ODM\EmbedOne(targetDocument="DocumentRelation")
+     */
+    protected $documentRelation;
+
+    /**
      * @return mixed
      */
     public function getFirstName()
@@ -198,6 +204,24 @@ class Tourist implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return DocumentRelation|null
+     */
+    public function getDocumentRelation()
+    {
+        return $this->documentRelation;
+    }
+
+    /**
+     * @param DocumentRelation|null $documentRelation
+     * @return $this
+     */
+    public function setDocumentRelation(DocumentRelation $documentRelation = null)
+    {
+        $this->documentRelation = $documentRelation;
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -208,6 +232,7 @@ class Tourist implements \JsonSerializable
             'phone' => $this->phone,
             'email' => $this->email,
             'citizenship' => $this->citizenship,
+            'documentRelation' => $this->getDocumentRelation()
         ];
     }
 }

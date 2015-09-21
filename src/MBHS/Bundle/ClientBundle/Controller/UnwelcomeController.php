@@ -3,6 +3,7 @@
 namespace MBHS\Bundle\ClientBundle\Controller;
 
 use MBHS\Bundle\BaseBundle\Controller\BaseController;
+use MBHS\Bundle\ClientBundle\Document\DocumentRelation;
 use MBHS\Bundle\ClientBundle\Document\Hotel;
 use MBHS\Bundle\ClientBundle\Document\Tourist;
 use MBHS\Bundle\ClientBundle\Document\Unwelcome;
@@ -32,7 +33,17 @@ class UnwelcomeController extends BaseController
         $data = $this->getRequestData();
         if($data && isset($data['tourist'])) {
             $data['tourist']['birthday'] = $this->get('mbhs.helper')->getDateFromString($data['tourist']['birthday']);
-            return $this->get('serializer')->denormalize($data['tourist'], Tourist::class);
+            /** @var Tourist $tourist */
+            $documentRelationData = $data['tourist']['documentRelation'];
+            unset($data['tourist']['documentRelation']);
+            $tourist = $this->get('serializer')->denormalize($data['tourist'], Tourist::class);
+
+            $documentRelationData['issued'] = $this->get('mbhs.helper')->getDateFromString($documentRelationData['issued']);
+            $documentRelationData['expiry'] = $this->get('mbhs.helper')->getDateFromString($documentRelationData['expiry']);
+            $documentRelationData['number'] = $documentRelationData['number'] ? (int) $documentRelationData['number'] : null;
+            $documentRelation = $this->get('serializer')->denormalize($documentRelationData, DocumentRelation::class);
+            $tourist->setDocumentRelation($documentRelation);
+            return $tourist;
         }
         return null;
     }
