@@ -7,7 +7,6 @@ use MBHS\Bundle\ClientBundle\Document\DocumentRelation;
 use MBHS\Bundle\ClientBundle\Document\Hotel;
 use MBHS\Bundle\ClientBundle\Document\Tourist;
 use MBHS\Bundle\ClientBundle\Document\Unwelcome;
-use MBHS\Bundle\ClientBundle\Document\UnwelcomeHistory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,13 +62,26 @@ class UnwelcomeController extends BaseController
                 ->setDrugs($data['drugs'])
                 ->setDestruction($data['destruction'])
                 ->setMaterialDamage($data['materialDamage'])
-                ->setTouristCitizenship($data['touristCitizenship'])
-                ->setTouristPhone($data['touristPhone'])
-                ->setTouristEmail($data['touristEmail'])
                 ->setComment($data['comment'])
                 ->setHotel($this->getRequestHotel())
                 ->setClient($this->getClient())
             ;
+
+            $tourist = $this->getRequestTourist();
+            if(!$tourist) {
+                return null;
+            }
+
+            $unwelcome->setFirstName($tourist->getFirstName());
+            $unwelcome->setLastName($tourist->getLastName());
+            $unwelcome->setPatronymic($tourist->getPatronymic());
+            $unwelcome->setBirthday($tourist->getBirthday());
+            $unwelcome->setCitizenship($tourist->getCitizenship());
+            $unwelcome->setCommunicationLanguage($tourist->getCommunicationLanguage());
+            $unwelcome->setDocumentRelation($tourist->getDocumentRelation());
+            $unwelcome->setEmail($tourist->getEmail());
+            $unwelcome->setPhone($tourist->getPhone());
+
 
             if(isset($data['arrivalTime']) && isset($data['departureTime'])) {
                 $unwelcome
@@ -99,11 +111,11 @@ class UnwelcomeController extends BaseController
     }
 
     /**
-     * @return \MBHS\Bundle\ClientBundle\Document\UnwelcomeHistoryRepository
+     * @return \MBHS\Bundle\ClientBundle\Document\UnwelcomeRepository
      */
-    private function getUnwelcomeHistoryRepository()
+    private function getUnwelcomeRepository()
     {
-        return $this->dm->getRepository('MBHSClientBundle:UnwelcomeHistory');
+        return $this->dm->getRepository('MBHSClientBundle:Unwelcome');
     }
 
     /**
@@ -111,11 +123,15 @@ class UnwelcomeController extends BaseController
      */
     private function getClient()
     {
-        $client = $this->container->get('mbhs.request')->getClient($this->get('request_stack')->getCurrentRequest());
-        if(!$client) {
-            throw $this->createAccessDeniedException();
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $mbhsRequest = $this->container->get('mbhs.request');
+        $client = $mbhsRequest->getClient($request);
+        if($client) {
+            return $client;
+        } else {
+            $mbhsRequest->addPirateClient($request);
+            return $this->createAccessDeniedException();
         }
-        return $client;
     }
 
     /**
@@ -125,41 +141,28 @@ class UnwelcomeController extends BaseController
      */
     public function addAction()
     {
-        $client = $this->getClient();
-
         $requestUnwelcome = $this->getRequestUnwelcome();
-        $requestTourist = $this->getRequestTourist();
+        $requestHotel = $this->getRequestHotel();
 
-        if(!$requestUnwelcome || !$requestTourist) {
+        if(!$requestUnwelcome || !$requestHotel) {
             return new JsonResponse(['status' => false]);
         }
 
-        $unwelcome = null;
-        $unwelcomeHistory = $this->getUnwelcomeHistoryRepository()->findOneByTourist($requestTourist);
-        if ($unwelcomeHistory) {
-            foreach ($unwelcomeHistory->getItems() as $u) {
-                if ($u == $client) {
-                    $unwelcome = $u;
-                }
-            }
-
-            if($unwelcome) {
-                return new JsonResponse([
-                    'status' => false,
-                    'message' => 'Can not add new unwelcome. Unwelcome for this tourist already exists.'
-                ]);
-            }
+        if(false) { //$this->getUnwelcomeRepository()->findOneByTourist($requestTourist)
+            return new JsonResponse([
+                'status' => false,
+                'message' => 'Can not add new unwelcome. Unwelcome for this tourist already exists.'
+            ]);
         } else {
-            $unwelcomeHistory = new UnwelcomeHistory();
-            $unwelcomeHistory->setTourist($requestTourist);
+            dump($requestHotel);
+            //$requestUnwelcome->setHotel($requestHotel);
+            $requestHotel->addUnwelcome($requestUnwelcome);
+            $this->dm->persist($requestHotel);
+            //$this->dm->persist($requestUnwelcome);
+            $this->dm->flush();
+
+            return new JsonResponse(['status' => true]);
         }
-
-        $unwelcomeHistory->addItem($requestUnwelcome);
-        $this->dm->persist($unwelcomeHistory);
-        //$this->dm->persist($requestUnwelcome);
-        $this->dm->flush();
-
-        return new JsonResponse(['status' => true]);
     }
 
     /**
@@ -175,7 +178,7 @@ class UnwelcomeController extends BaseController
         $requestTourist = $this->getRequestTourist();
 
         $unwelcome = null;
-        $unwelcomeHistory = $this->getUnwelcomeHistoryRepository()->findOneByTourist($requestTourist);
+        $unwelcomeHistory = $this->getUnwelcomeRepository()->findOneByTourist($requestTourist);
         if ($unwelcomeHistory) {
             foreach ($unwelcomeHistory->getItems() as $u) {
                 if ($u->getClient() == $client) {
@@ -221,8 +224,8 @@ class UnwelcomeController extends BaseController
 
         $requestTourist = $this->getRequestTourist();
         if ($requestTourist) {
-            /** @var UnwelcomeHistory|null $unwelcomeHistory */
-            $unwelcomeHistory = $this->getUnwelcomeHistoryRepository()->findOneByTourist($requestTourist);
+            /** @var Unwelcome|null $unwelcomeHistory */
+            $unwelcomeHistory = $this->getUnwelcomeRepository()->findOneByTourist($requestTourist);
         }
 
         if ($unwelcomeHistory) {
@@ -253,7 +256,7 @@ class UnwelcomeController extends BaseController
         $successDeleted = false;
         if ($tourist) {
             /** @var UnwelcomeHistory|null $unwelcomeHistory */
-            $unwelcomeHistory = $this->getUnwelcomeHistoryRepository()->findOneByTourist($tourist);
+            $unwelcomeHistory = $this->getUnwelcomeRepository()->findOneByTourist($tourist);
 
             if($unwelcomeHistory) {
                 foreach($unwelcomeHistory->getItems() as $unwelcome) {
@@ -285,7 +288,7 @@ class UnwelcomeController extends BaseController
         if($requestTourist) {
             return new JsonResponse([
                 'status' => true,
-                'result' => $this->getUnwelcomeHistoryRepository()->isUnwelcome($requestTourist)
+                'result' => $this->getUnwelcomeRepository()->isUnwelcome($requestTourist)
             ]);
         }
         return new JsonResponse([

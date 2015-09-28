@@ -3,6 +3,7 @@
 namespace MBHS\Bundle\ClientBundle\Document;
 
 use Gedmo\Blameable\Traits\BlameableDocument;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableDocument;
 use Gedmo\Timestampable\Traits\TimestampableDocument;
 use MBHS\Bundle\BaseBundle\Document\BaseDocument as Base;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -13,25 +14,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Class Unwelcome
  * @author Aleksandr Arofikin <sashaaro@gmail.com>
  *
- * @ODM\EmbeddedDocument
+ * @ODM\Document(repositoryClass="UnwelcomeRepository")
  * @Gedmo\Loggable
  */
-class Unwelcome extends Base implements \JsonSerializable
+class Unwelcome extends Tourist implements \JsonSerializable
 {
-    use TimestampableDocument;
-    use BlameableDocument;
-
     /**
      * @var Client
      * @Gedmo\Versioned
-     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Client", inversedBy="packages")
+     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Client")
      * @Assert\NotNull()
      */
     protected $client;
 
     /**
      * @var Hotel
-     * @ODM\EmbedOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel")
+     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel", mappedBy="unwelcome")
+     * @Assert\NotNull()
      */
     protected $hotel;
 
@@ -70,21 +69,6 @@ class Unwelcome extends Base implements \JsonSerializable
      * @ODM\Integer()
      */
     protected $materialDamage;
-    /**
-     * @var string
-     * @ODM\String()
-     */
-    protected $touristCitizenship;
-    /**
-     * @var string
-     * @ODM\String()
-     */
-    protected $touristEmail;
-    /**
-     * @var string
-     * @ODM\String()
-     */
-    protected $touristPhone;
 
     /**
      * @var string
@@ -273,60 +257,6 @@ class Unwelcome extends Base implements \JsonSerializable
     /**
      * @return string
      */
-    public function getTouristCitizenship()
-    {
-        return $this->touristCitizenship;
-    }
-
-    /**
-     * @param string $touristCitizenship
-     * @return $this
-     */
-    public function setTouristCitizenship($touristCitizenship)
-    {
-        $this->touristCitizenship = $touristCitizenship;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTouristEmail()
-    {
-        return $this->touristEmail;
-    }
-
-    /**
-     * @param string $touristEmail
-     * @return $this
-     */
-    public function setTouristEmail($touristEmail)
-    {
-        $this->touristEmail = $touristEmail;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTouristPhone()
-    {
-        return $this->touristPhone;
-    }
-
-    /**
-     * @param string $touristPhone
-     * @return $this
-     */
-    public function setTouristPhone($touristPhone)
-    {
-        $this->touristPhone = $touristPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getComment()
     {
         return $this->comment;
@@ -382,7 +312,7 @@ class Unwelcome extends Base implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return [
+        return parent::jsonSerialize() + [
             'foul' => $this->getFoul(),
             'aggression' => $this->getAggression(),
             'inadequacy' => $this->getInadequacy(),

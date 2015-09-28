@@ -5,10 +5,10 @@ namespace MBHS\Bundle\ClientBundle\Document;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
 /**
- * Class UnwelcomeHistoryRepository
+ * Class UnwelcomeRepository
  * @author Aleksandr Arofikin <sashaaro@gmail.com>
  */
-class UnwelcomeHistoryRepository extends DocumentRepository
+class UnwelcomeRepository extends DocumentRepository
 {
     /**
      * @param Tourist $tourist

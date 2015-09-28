@@ -3,15 +3,27 @@
 namespace MBHS\Bundle\ClientBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Gedmo\Blameable\Traits\BlameableDocument;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableDocument;
+use Gedmo\Timestampable\Traits\TimestampableDocument;
+use MBHS\Bundle\BaseBundle\Document\BaseDocument;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ODM\EmbeddedDocument
- * @Gedmo\Loggable
+ * Class Hotel
+ * @author Aleksandr Arofikin <sashaaro@gmail.com>
+ *
+ * @ODM\MappedSuperclass
+ * @Gedmo\Loggable()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Tourist implements \JsonSerializable
+class Tourist extends BaseDocument implements \JsonSerializable
 {
+    use TimestampableDocument;
+    use SoftDeleteableDocument;
+    use BlameableDocument;
+
     /**
      * @var string
      * @ODM\String()
