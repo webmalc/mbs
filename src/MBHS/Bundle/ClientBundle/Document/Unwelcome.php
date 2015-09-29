@@ -29,7 +29,7 @@ class Unwelcome extends Tourist implements \JsonSerializable
 
     /**
      * @var Hotel
-     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel", mappedBy="unwelcome")
+     * @ODM\ReferenceOne(targetDocument="MBHS\Bundle\ClientBundle\Document\Hotel", inversedBy="unwelcome")
      * @Assert\NotNull()
      */
     protected $hotel;
@@ -321,13 +321,30 @@ class Unwelcome extends Tourist implements \JsonSerializable
             'destruction' => $this->getDestruction(),
             'materialDamage' => $this->getMaterialDamage(),
             'comment' => $this->getComment(),
-            'touristCitizenship' => $this->getTouristCitizenship(),
-            'touristEmail' => $this->getTouristEmail(),
-            'touristPhone' => $this->getTouristPhone(),
+            //'tourist' => $this->getTourist(),
             'createdAt' => $this->getCreatedAt() ? $this->getCreatedAt()->format('d.m.Y') : null,
             'hotel' => $this->getHotel(),
             'arrivalTime' => $this->getArrivalTime() ? $this->getArrivalTime()->format('d.m.Y') : null,
             'departureTime' => $this->getDepartureTime() ? $this->getDepartureTime()->format('d.m.Y') : null,
         ];
+    }
+
+    /**
+     * @return Tourist
+     */
+    private function getTourist()
+    {
+        $tourist = new Tourist();
+
+        $tourist->setFirstName($this->getFirstName());
+        $tourist->setLastName($this->getLastName());
+        $tourist->setPatronymic($this->getPatronymic());
+        $tourist->setBirthday($this->getBirthday());
+        $tourist->setCitizenship($this->getCitizenship());
+        $tourist->setCommunicationLanguage($this->getCommunicationLanguage());
+        $tourist->setDocumentRelation($this->getDocumentRelation());
+        $tourist->setEmail($this->getEmail());
+        $tourist->setPhone($this->getPhone());
+        return $tourist;
     }
 }

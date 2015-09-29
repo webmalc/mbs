@@ -10,6 +10,7 @@ use Gedmo\Timestampable\Traits\TimestampableDocument;
 use MBHS\Bundle\BaseBundle\Document\BaseDocument;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 
 /**
  * Class Hotel
@@ -18,12 +19,25 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ODM\Document()
  * @Gedmo\Loggable()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @MongoDBUnique(fields="internalID", message="The hotel with the same internalID already exists")
  */
 class Hotel extends BaseDocument implements \JsonSerializable
 {
     use TimestampableDocument;
     use SoftDeleteableDocument;
     use BlameableDocument;
+
+    /**
+     * @var string
+     * @ODM\String()
+     */
+    protected $internalID;
+
+    /**
+     * @var Client
+     * @ODM\ReferenceOne(targetDocument="Client")
+     */
+    protected $client;
 
     /**
      * @var string
@@ -38,7 +52,7 @@ class Hotel extends BaseDocument implements \JsonSerializable
     protected $city;
     /**
      * @var ArrayCollection|Unwelcome[]
-     * @ODM\ReferenceMany(targetDocument="Unwelcome", inversedBy="hotel")
+     * @ODM\ReferenceMany(targetDocument="Unwelcome", mappedBy="hotel")
      */
     protected $unwelcome;
 
@@ -46,6 +60,39 @@ class Hotel extends BaseDocument implements \JsonSerializable
     public function __construct()
     {
         $this->unwelcome = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getInternalID()
+    {
+        return $this->internalID;
+    }
+
+    /**
+     * @param string $internalID
+     * @return $this
+     */
+    public function setInternalID($internalID)
+    {
+        $this->internalID = $internalID;
+        return $this;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param Client $client
+     * @return $this
+     */
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
+        return $this;
     }
 
     /**
@@ -101,11 +148,24 @@ class Hotel extends BaseDocument implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @param \MBHS\Bundle\ClientBundle\Document\Unwelcome $unwelcome
+     */
+    public function removeUnwelcome(\MBHS\Bundle\ClientBundle\Document\Unwelcome $unwelcome)
+    {
+        $this->unwelcome->removeElement($unwelcome);
+    }
+
     public function jsonSerialize()
     {
         return [
             'title' => $this->title,
             'city' => $this->city,
         ];
+    }
+
+    public function getUnwelcomeCount()
+    {
+        return count($this->unwelcome);
     }
 }

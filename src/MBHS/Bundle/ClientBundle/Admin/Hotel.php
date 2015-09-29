@@ -9,11 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-/**
- * Class UnwelcomeHistory
- * @author Aleksandr Arofikin <sashaaro@gmail.com>
- */
-class UnwelcomeHistory extends Admin
+class Hotel extends Admin
 {
     protected $datagridValues = array(
         '_page' => 1,
@@ -26,7 +22,7 @@ class UnwelcomeHistory extends Admin
         /** @var DocumentManager $dm */
         $dm  = $this->getConfigurationPool()->getContainer()->get('doctrine_mongodb')->getManager();
         $types = $dm
-            ->getRepository('MBHSClientBundle:UnwelcomeHistory')
+            ->getRepository('MBHSClientBundle:Hotel')
             ->createQueryBuilder('q')
             //->distinct('title')
             ->getQuery()
@@ -40,37 +36,43 @@ class UnwelcomeHistory extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            //->add('tourist', 'sonata_type_model_list', ['label' => 'Tourist'])
-            ->add('tourist.firstName')
-            ->add('tourist.firstName')
-            //->add('items', 'sonata_type_collection')
-            //->add('client', 'sonata_type_model_list', ['btn_delete' => false])
-            //->add('isAggressor')
-            //->add('comment', 'textarea')
+            ->add('internalID')
+            ->add('title')
+            ->add('city')
+            ->add('client', 'sonata_type_model_list', ['btn_delete' => false])
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('tourist.firstName')
-            ->add('tourist.lastName')
-            ->add('tourist.birthday')
-            //->add('client')
+            ->add('internalID')
+            ->add('title')
+            ->add('city')
+            ->add('client')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('tourist.firstName')
-            ->addIdentifier('tourist.lastName')
-            ->addIdentifier('tourist.birthday')
-            ->add('items')
-            //->add('comment')
-            //->add('isAggressor')
-            ->add('createdAt')
-            ->add('_action', 'actions', ['actions' => ['edit' => [], 'delete' => []]])
+            ->addIdentifier('id')
+            ->add('internalID')
+            ->add('title')
+            ->add('city')
+            ->add('unwelcome count', 'field')
+            ->add('client')
+            ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
+        ;
+    }
+
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('internalID')
+            ->add('title')
+            ->add('city')
+            ->add('client')
         ;
     }
 }

@@ -15,18 +15,26 @@ class UnwelcomeRepository extends DocumentRepository
      * @return array
      * @todo return Doctrine Criteria
      */
-    private function getTouristCriteria(Tourist $tourist)
+    private function getTouristCriteria(Tourist $tourist, $queryBuilder = false)
     {
         $criteria = [];
         $documentRelation = $tourist->getDocumentRelation();
         if($documentRelation && $documentRelation->getType() && $documentRelation->getSeries() && $documentRelation->getNumber()) {
-            $criteria['tourist.documentRelation.type'] = $documentRelation->getType();
-            $criteria['tourist.documentRelation.series'] = $documentRelation->getSeries();
-            $criteria['tourist.documentRelation.number'] = $documentRelation->getNumber();
+            $criteria['documentRelation.type'] = $documentRelation->getType();
+            $criteria['documentRelation.series'] = $documentRelation->getSeries();
+            $criteria['documentRelation.number'] = $documentRelation->getNumber();
         } else {
-            $criteria['tourist.firstName'] = $tourist->getFirstName();
-            $criteria['tourist.lastName'] = $tourist->getLastName();
-            $criteria['tourist.birthday'] = $tourist->getBirthday();
+            $criteria['firstName'] = $tourist->getFirstName();
+            $criteria['lastName'] = $tourist->getLastName();
+            $criteria['birthday'] = $tourist->getBirthday();
+        }
+
+        if($queryBuilder) {
+            $queryBuilder = $this->createQueryBuilder();
+            foreach($criteria as $field => $equals) {
+                $queryBuilder->field($field)->equals($equals);
+            }
+            return $queryBuilder;
         }
 
         return $criteria;
@@ -34,11 +42,21 @@ class UnwelcomeRepository extends DocumentRepository
 
     /**
      * @param Tourist $tourist
-     * @return UnwelcomeHistory|null
+     * @return Unwelcome[]
      */
-    public function findOneByTourist(Tourist $tourist)
+    public function findByTourist(Tourist $tourist)
     {
-        return $this->findOneBy($this->getTouristCriteria($tourist));
+        return $this->findBy($this->getTouristCriteria($tourist));
+    }
+
+    /**
+     * @param Tourist $tourist
+     * @param Hotel $hotel
+     * @return Unwelcome
+     */
+    public function findOneByTouristAndHotel(Tourist $tourist, Hotel $hotel)
+    {
+        return $this->findOneBy($this->getTouristCriteria($tourist) + ['hotel.id' => $hotel->getId()]);
     }
 
     /**
@@ -47,13 +65,7 @@ class UnwelcomeRepository extends DocumentRepository
      */
     public function isUnwelcome(Tourist $tourist)
     {
-        $queryBuilder = $this->createQueryBuilder();
-        foreach($this->getTouristCriteria($tourist) as $field => $equals) {
-            $queryBuilder->field($field)->equals($equals);
-        }
-
-        $queryBuilder->field('items')->exists(true);
-        $queryBuilder->field('items')->not($queryBuilder->expr()->size(0));
+        $queryBuilder = $this->getTouristCriteria($tourist, true);
         return $queryBuilder->getQuery()->count() > 0;
     }
 }

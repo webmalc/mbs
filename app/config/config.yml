@@ -192,6 +192,8 @@ sonata_admin:
             icon: <i class='fa fa-clock-o'></i>
           Auth:
             icon: <i class='fa fa-lock'></i>
+          Unwelcome:
+            icon: <i class='fa fa-lock'></i>
 
 sonata_doctrine_mongo_db_admin:
     templates:
